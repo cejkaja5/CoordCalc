@@ -1,0 +1,55 @@
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows Installer files
+.vs2019/
+.vs2017/
+.vs/
+
+# Build Folders
+[Dd]ebug/
+[Dd]ebugPublic/
+[Dd]Release/
+[Dd]ebug/
+[Dd]Release/
+[Dd]ReleasePublic/
+
+# User-specific files
+.vscode/
+
+# JetBrains Rider
+.idea/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows Installer
+*.pdb
+*.obj
+*.idb
+
+#binary files
+/obj
+/bin
+
+# Tye configurations (used in some .NET Core projects)
+.tye/
+
+# ASP.NET Core https://docs.microsoft.com/en-us/aspnet/core/first-app/hosting?view=aspnetcore-5.0
+project.lock.json
+
+# .NET Core
+project.assets.json
+project.fragment.lock.json
