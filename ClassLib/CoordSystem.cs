@@ -56,5 +56,10 @@ namespace CoordCalc.ClassLib
 		{
 			return new CoordSystem(Matrix4x4.Identity, "0", null);
 		}
+
+		public override string ToString() 
+		{
+			return _name;
+		}
     }
 }

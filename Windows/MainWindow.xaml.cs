@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.ObjectModel;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,9 +20,15 @@ namespace CoordCalc
     public partial class MainWindow : Window
     {
         private CoordSystemsTree _coordSystemTree;
+
+        public Collection<CoordSystem> CoordSystems
+        {
+            get { return _coordSystemTree.Nodes; }
+        }
         public MainWindow(CoordSystemsTree system, ProjectSelectorWindow opener)
         {
             _coordSystemTree = system;
+            DataContext = this;
             InitializeComponent();
             opener.Close();
         }

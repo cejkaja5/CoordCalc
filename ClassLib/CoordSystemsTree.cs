@@ -8,6 +8,7 @@ using System.Numerics;
 using System.Windows.Shapes;
 using System.Windows;
 using System.Xml.Linq;
+using System.Collections.ObjectModel;
 
 namespace CoordCalc.ClassLib
 {
@@ -19,6 +20,11 @@ namespace CoordCalc.ClassLib
             _nodes = new Dictionary<string, CoordSystem>();
             CoordSystem globalSystem = CoordSystem.GetGlobalCoordSystem();
             AddNode(globalSystem);
+        }
+
+        public Collection<CoordSystem> Nodes
+        {
+            get { return new Collection<CoordSystem>(_nodes.Values.ToList()); }
         }
 
         public CoordSystemsTree(string filepath) : this()
