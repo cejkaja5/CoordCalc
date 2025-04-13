@@ -11,13 +11,15 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CoordCalc.ClassLib;
 using CoordCalc.Windows;
+using System.Numerics;
+using System.ComponentModel;
 
 namespace CoordCalc
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private CoordSystemsTree _coordSystemTree;
 
@@ -25,12 +27,82 @@ namespace CoordCalc
         {
             get { return _coordSystemTree.Nodes; }
         }
-        public MainWindow(CoordSystemsTree system, ProjectSelectorWindow opener)
+        public MainWindow(CoordSystemsTree tree, ProjectSelectorWindow opener)
         {
-            _coordSystemTree = system;
+            _coordSystemTree = tree;
+            _selectedCoordSystem = tree.GetRootSystem();
             DataContext = this;
             InitializeComponent();
+            lvCoordsSystems.SelectedItem = _selectedCoordSystem;
             opener.Close();
+        }
+
+        public Matrix4x4 IdeMatrix { get; set; } = Matrix4x4.CreateRotationY(0.25f);
+
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private CoordSystem _selectedCoordSystem;
+        public CoordSystem SelectedCoordSystem
+        {
+            get { return _selectedCoordSystem; }
+            set 
+            {
+                if (_selectedCoordSystem != value) 
+                {
+                    _selectedCoordSystem = value; 
+                    OnPropertyChanged(nameof(SelectedCoordSystem));
+                    OnPropertyChanged(nameof(SelectedCoordSystemNameText));
+                    OnPropertyChanged(nameof(SelectedCoordSystemParentText));
+                    OnPropertyChanged(nameof(SelectedCoordSystemTransformationHeader));
+                }
+            }
+        }
+
+        public string SelectedCoordSystemNameText
+        {
+            get { return $"Name: {SelectedCoordSystem.Name}"; }
+        }
+
+        public string SelectedCoordSystemParentText
+        {
+            get
+            {
+                if (SelectedCoordSystem.IsRoot())
+                {
+                    return "Root system doesnt have a parent system";
+                }
+                else
+                {
+                    return $"Parent: {SelectedCoordSystem.Parent.Name}";
+                }
+            }
+        }
+
+        public string SelectedCoordSystemTransformationHeader
+        {
+            get
+            {
+                if (SelectedCoordSystem.IsRoot())
+                {
+                    return "---No parent->child transforamtion for root system---";
+                }
+                else
+                {
+                    return $"{SelectedCoordSystem.Parent.Name}->{SelectedCoordSystem.Name} Transformation:";
+                }
+            }
+        }
+
+
+        private void lvCoordsSystems_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SelectedCoordSystem = (CoordSystem)lvCoordsSystems.SelectedItem;
         }
     }
 }

@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using CoordCalc.ClassLib;
 using Microsoft.Win32;
+using System.Numerics;
 
 namespace CoordCalc.Windows
 {
@@ -26,6 +27,7 @@ namespace CoordCalc.Windows
         {
             _filePath = String.Empty;
             InitializeComponent();
+            DataContext = this;
         }
 
         private string _filePath;

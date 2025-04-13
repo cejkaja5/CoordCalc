@@ -18,7 +18,7 @@ namespace CoordCalc.ClassLib
         public CoordSystemsTree() 
         {
             _nodes = new Dictionary<string, CoordSystem>();
-            CoordSystem globalSystem = CoordSystem.GetGlobalCoordSystem();
+            CoordSystem globalSystem = CoordSystem.GetRootCoordSystem();
             AddNode(globalSystem);
         }
 
@@ -104,6 +104,11 @@ namespace CoordCalc.ClassLib
             {
                 _nodes[name] = coordSystem;
             }
+        }
+
+        public CoordSystem GetRootSystem()
+        {
+            return _nodes["0"];
         }
     }
 }

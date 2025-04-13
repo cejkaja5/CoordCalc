@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="CoordCalc.View.MatrixDisplay"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CoordCalc.View"
+             mc:Ignorable="d" 
+             Height="200" Width="200">
+    <Border BorderBrush="Black" BorderThickness="1" Padding="0">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25*"/>
+            <RowDefinition Height="25*"/>
+            <RowDefinition Height="25*"/>
+            <RowDefinition Height="25*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25*"/>
+            <ColumnDefinition Width="25*"/>
+            <ColumnDefinition Width="25*"/>
+            <ColumnDefinition Width="25*"/>
+        </Grid.ColumnDefinitions>
+
+            <Grid.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="TextAlignment" Value="Center"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+            </Grid.Resources>
+
+            <TextBlock Text="{Binding Matrix.M11, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
+                   Grid.Row="0" Grid.Column="0" Margin="2"/>
+            <TextBlock Text="{Binding Matrix.M12, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
+                   Grid.Row="0" Grid.Column="1" Margin="2"/>
+            <TextBlock Text="{Binding Matrix.M13, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
+                   Grid.Row="0" Grid.Column="2" Margin="2"/>
+            <TextBlock Text="{Binding Matrix.M14, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
+                   Grid.Row="0" Grid.Column="3" Margin="2"/>
+
+            <TextBlock Text="{Binding Matrix.M21, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
+                   Grid.Row="1" Grid.Column="0" Margin="2"/>
+            <TextBlock Text="{Binding Matrix.M22, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
+                   Grid.Row="1" Grid.Column="1" Margin="2"/>
+            <TextBlock Text="{Binding Matrix.M23, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}" 
+                   Grid.Row="1" Grid.Column="2" Margin="2"/>
+            <TextBlock Text="{Binding Matrix.M24, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
+                   Grid.Row="1" Grid.Column="3" Margin="2"/>
+
+            <TextBlock Text="{Binding Matrix.M31, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
+                   Grid.Row="2" Grid.Column="0" Margin="2"/>
+            <TextBlock Text="{Binding Matrix.M32, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
+                   Grid.Row="2" Grid.Column="1" Margin="2"/>
+            <TextBlock Text="{Binding Matrix.M33, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
+                   Grid.Row="2" Grid.Column="2" Margin="2"/>
+            <TextBlock Text="{Binding Matrix.M34, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
+                   Grid.Row="2" Grid.Column="3" Margin="2"/>
+
+            <TextBlock Text="{Binding Matrix.M41, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
+                   Grid.Row="3" Grid.Column="0" Margin="2"/>
+            <TextBlock Text="{Binding Matrix.M42, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
+                   Grid.Row="3" Grid.Column="1" Margin="2"/>
+            <TextBlock Text="{Binding Matrix.M43, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
+                   Grid.Row="3" Grid.Column="2" Margin="2"/>
+            <TextBlock Text="{Binding Matrix.M44, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
+                   Grid.Row="3" Grid.Column="3" Margin="2"/>
+    </Grid>
+    </Border>
+
+
+</UserControl>
