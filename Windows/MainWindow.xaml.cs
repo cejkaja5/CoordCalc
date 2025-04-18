@@ -47,6 +47,20 @@ namespace CoordCalc
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        protected virtual void OnPropertyChangedAllMatrixProperties()
+        {
+            OnPropertyChanged(nameof(SelectedCoordSystem));
+            OnPropertyChanged(nameof(SelectedCoordSystemNameText));
+            OnPropertyChanged(nameof(SelectedCoordSystemParentText));
+            OnPropertyChanged(nameof(SelectedCoordSystemTransformationHeader));
+            OnPropertyChanged(nameof(SelectedCoordSystemTranslationVectorText));
+            OnPropertyChanged(nameof(SelectedCoordSystemRotationText));
+            OnPropertyChanged(nameof(SelectedCoordSystemScaleVectorText));
+            OnPropertyChanged(nameof(SelectedCoordSystemEulerAngles));
+            OnPropertyChanged(nameof(SelectedCoordSystemEulerAnglesText));
+            OnPropertyChanged(nameof(BtnGoToParentContent));
+        }
+
         private CoordSystem _selectedCoordSystem;
         public CoordSystem SelectedCoordSystem
         {
@@ -55,26 +69,40 @@ namespace CoordCalc
             {
                 if (_selectedCoordSystem != value) 
                 {
-                    _selectedCoordSystem = value; 
-                    OnPropertyChanged(nameof(SelectedCoordSystem));
-                    OnPropertyChanged(nameof(SelectedCoordSystemNameText));
-                    OnPropertyChanged(nameof(SelectedCoordSystemParentText));
-                    OnPropertyChanged(nameof(SelectedCoordSystemTransformationHeader));
-                    if (Matrix4x4.Decompose(SelectedCoordSystem.Matrix, out Vector3 scaleVector,
+                    _selectedCoordSystem = value;
+                    btnGoToParent.Visibility = Visibility.Visible;
+
+                    if (_selectedCoordSystem.IsRoot())
+                    {
+                        SelectedCoordSystemRotation = null;
+                        SelectedCoordSystemScaleVector = null;
+                        SelectedCoordSystemTranslationVector = null;
+                        SelectedCoordSystemEulerAngles = null;
+                        btnGoToParent.Visibility = Visibility.Collapsed;
+                    }
+
+                    else if (Matrix4x4.Decompose(SelectedCoordSystem.Matrix, out Vector3 scaleVector,
                         out Quaternion rotation, out Vector3 translationVector))
                     {
                         SelectedCoordSystemRotation = rotation;
                         SelectedCoordSystemScaleVector = scaleVector;
                         SelectedCoordSystemTranslationVector = translationVector;
-                        OnPropertyChanged(nameof(SelectedCoordSystemTranslationVectorText));
-                        OnPropertyChanged(nameof(SelectedCoordSystemRotationText));
-                        OnPropertyChanged(nameof(SelectedCoordSystemScaleVectorText));
+                        SelectedCoordSystemEulerAngles = rotation.ToEulerAngles();
                     }
+
                     else
+
                     {
-                        MessageBox.Show("Decomposing transformation matrix failed", "Warning",
+                        MatrixHelper.CheckIfMatrixIsDecomposable(SelectedCoordSystem.Matrix, out string message);
+                        MessageBox.Show($"Decomposing transformation matrix failed. Reason: {message}", "Warning",
                             MessageBoxButton.OK, MessageBoxImage.Warning);
+                        SelectedCoordSystemRotation = null;
+                        SelectedCoordSystemScaleVector = null;
+                        SelectedCoordSystemTranslationVector = null;
+                        SelectedCoordSystemEulerAngles = null;
                     }
+
+                    OnPropertyChangedAllMatrixProperties();
                 }
             }
         }
@@ -105,18 +133,18 @@ namespace CoordCalc
             {
                 if (SelectedCoordSystem.IsRoot())
                 {
-                    return "No parent->child transforamtion for root system";
+                    return "No child->parent transforamtion for root system";
                 }
                 else
                 {
-                    return $"{SelectedCoordSystem.Parent.Name}->{SelectedCoordSystem.Name} Transformation:";
+                    return $"{SelectedCoordSystem.Name}->{SelectedCoordSystem.Parent.Name} Transformation:";
                 }
             }
         }
 
-        private Vector3 _selectedCoordSystemTranslationVector;
+        private Vector3? _selectedCoordSystemTranslationVector;
 
-        public Vector3 SelectedCoordSystemTranslationVector
+        public Vector3? SelectedCoordSystemTranslationVector
         {
             get { return _selectedCoordSystemTranslationVector; }
             set { _selectedCoordSystemTranslationVector = value; }
@@ -124,12 +152,22 @@ namespace CoordCalc
 
         public string SelectedCoordSystemTranslationVectorText
         {
-            get { return $"Translation vector: {SelectedCoordSystemTranslationVector}"; }
+            get 
+            {
+                if (SelectedCoordSystemTranslationVector != null)
+                {
+                    return $"Translation vector: {((Vector3)SelectedCoordSystemTranslationVector).ToCustomString()}";
+                }
+                else
+                {
+                    return "Translation vector: None";
+                }
+            }
         }
 
-        private Vector3 _selectedCoordSystemScaleVector;
+        private Vector3? _selectedCoordSystemScaleVector;
 
-        public Vector3 SelectedCoordSystemScaleVector
+        public Vector3? SelectedCoordSystemScaleVector
         {
             get { return _selectedCoordSystemScaleVector; }
             set { _selectedCoordSystemScaleVector = value; }
@@ -137,25 +175,99 @@ namespace CoordCalc
 
         public string SelectedCoordSystemScaleVectorText
         {
-            get { return $"Scale vector: {SelectedCoordSystemScaleVector}"; }
-        }
+            get 
+            {
+                if (SelectedCoordSystemScaleVector != null)
+                {
+                    return $"Scale vector: {((Vector3)SelectedCoordSystemScaleVector).ToCustomString()}";
+                }
+                else
+                {
+                    return "Scale vector: None";
+                }
+            } 
+        }              
+        
+        private Quaternion? _selectedCoordSystemRotation;
 
-        private Quaternion _selectedCoordSystemRotation;
-
-        public Quaternion SelectedCoordSystemRotation
+        public Quaternion? SelectedCoordSystemRotation
         {
             get { return _selectedCoordSystemRotation; }
             set { _selectedCoordSystemRotation = value; }
         }
 
+        private Vector3? _electedCoordSystemEulerAngles;
+
+        public Vector3? SelectedCoordSystemEulerAngles
+        {
+            get { return _electedCoordSystemEulerAngles; }
+            set { _electedCoordSystemEulerAngles = value; }
+        }
+
+        public string SelectedCoordSystemEulerAnglesText
+        {
+            get
+            {
+                if (SelectedCoordSystemEulerAngles != null)
+                {
+                    return $"Euler angles in degrees: {((Vector3)SelectedCoordSystemEulerAngles).ToEulerAnglesString()}";
+                }
+                else
+                {
+                    return "Euler angles: None";
+                }
+            }
+        }
+
         public string SelectedCoordSystemRotationText
         {
-            get { return $"Quaternion: {SelectedCoordSystemRotation}"; }
+            get 
+            { 
+                if (SelectedCoordSystemRotation != null)
+                {
+                    return $"Quaternion: {((Quaternion)SelectedCoordSystemRotation).ToCustomString()}";
+                }
+                else
+                {
+                    return "Quaternion: None";
+                }
+            }
         }
 
         private void lvCoordsSystems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SelectedCoordSystem = (CoordSystem)lvCoordsSystems.SelectedItem;
+        }
+
+        private void btnGoToParent_Click(object sender, RoutedEventArgs e)
+        {
+            if (_selectedCoordSystem.IsRoot()) return;
+
+            lvCoordsSystems.SelectedItem = _selectedCoordSystem.Parent;
+        }
+
+        public string BtnGoToParentContent
+        {
+            get { return $"Go to parent ({SelectedCoordSystem.Name})"; }
+        }
+
+        private void btnAddChild_Click(object sender, RoutedEventArgs e)
+        {
+            InputCoordSystemWindow window = new InputCoordSystemWindow(SelectedCoordSystem);
+            window.ShowDialog();
+            
+            if (window.Success) 
+            {
+                CoordSystem child = new CoordSystem(window.OutputMatrix, window.SystemName, SelectedCoordSystem);
+                _coordSystemTree.AddNode(child);
+                OnPropertyChanged(nameof(CoordSystems));
+                lvCoordsSystems.SelectedItem = child;
+            }
+        }
+
+        private void btnEdit_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

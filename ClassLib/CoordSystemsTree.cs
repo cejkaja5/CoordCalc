@@ -9,6 +9,7 @@ using System.Windows.Shapes;
 using System.Windows;
 using System.Xml.Linq;
 using System.Collections.ObjectModel;
+using System.Globalization;
 
 namespace CoordCalc.ClassLib
 {
@@ -46,6 +47,7 @@ namespace CoordCalc.ClassLib
                         {
                             MessageBox.Show("Reading second line of coord system from file failed", "Warning",
                                  MessageBoxButton.OK, MessageBoxImage.Error);
+                            break;
                         }
 
                         Matrix4x4 matrix = StringToMatrix(line2);
@@ -78,7 +80,7 @@ namespace CoordCalc.ClassLib
                 string[] values = rows[i].Split(',');
                 for (int j = 0; j < 4; j++)
                 {
-                    matrixArray[i, j] = float.Parse(values[j].Trim());
+                    matrixArray[i, j] = float.Parse(values[j].Trim(), CultureInfo.InvariantCulture);
                 }
             }
 

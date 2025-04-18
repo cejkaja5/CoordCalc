@@ -35,7 +35,18 @@ namespace CoordCalc.Windows
         public string FilePath
         {
             get { return _filePath; }
-            set { _filePath = value; }
+            set 
+            { 
+                _filePath = value;
+                if (_filePath != String.Empty) 
+                {
+                    okBtn.IsEnabled = true;
+                }
+                else
+                {
+                    okBtn.IsEnabled = false;
+                }
+            }
         }
 
 
