@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CoordCalc.Windows"
+        xmlns:controls="clr-namespace:CoordCalc.View"
         mc:Ignorable="d"
-        Title="InputCoordSystemWindow" Height="450" Width="800">
+        Title="InputCoordSystemWindow" Height="450" Width="400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -14,34 +15,44 @@
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
         
-        <Grid Grid.Row="0">
+        <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="Name:" TextAlignment="Right" VerticalAlignment="Center" />
+            <TextBox Style="{StaticResource MyTextBoxStyle}" Name="tbEnterName" HorizontalContentAlignment="Left" VerticalAlignment="Center" 
+                     HorizontalAlignment="Center" VerticalContentAlignment="Center" TextChanged="tbEnterName_TextChanged"/>
+        </StackPanel>
+        
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="25*"/>
+                <ColumnDefinition Width="25*"/>
+                <ColumnDefinition Width="50*"/>
             </Grid.ColumnDefinitions>
 
             <CheckBox Style="{StaticResource MyCheckBoxStyle}" Name="cbAsMatrix" Content="As Matrix" 
-                      Width="100" Checked="cbAsMatrix_Checked" Unchecked="cbAsMatrix_Unchecked" />
+                      Checked="cbAsMatrix_Checked" Unchecked="cbAsMatrix_Unchecked" />
             <CheckBox Style="{StaticResource MyCheckBoxStyle}" Name="cbAsVector" Content="As Vector" Grid.Column="1"
                       Checked="cbAsVector_Checked" Unchecked="cbAsVector_Unchecked" />
             <CheckBox Style="{StaticResource MyCheckBoxStyle}" Name="cbAsAnglesAndTranslation" Content="As rotation and translation" Grid.Column="2"
                       Checked="cbAsAnglesAndTranslation_Checked" Unchecked="cbAsAnglesAndTranslation_Unchecked" />
 
         </Grid>
-
-        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="Name:" TextAlignment="Right" VerticalAlignment="Center" />
-            <TextBox Style="{StaticResource MyTextBoxStyle}" Name="tbEnterName" HorizontalContentAlignment="Left" VerticalAlignment="Center" 
-                     HorizontalAlignment="Center" TextChanged="tbEnterName_TextChanged"/>
-        </StackPanel>
         
-        <Grid Name="mainContentMatrix" Visibility="Visible" Grid.Row="2">
-            <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="As MATRIX"/>
+        <Grid Name="mainContentMatrix" Visibility="Collapsed" Grid.Row="2">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="Auto">
+                <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="Enter transformation matrix:"/>
+                <controls:MatrixInput Matrix="{Binding Matrix}"/>
+            </StackPanel>
         </Grid>
         
-        <Grid Name="mainContentVector" Visibility="Collapsed" Grid.Row="2">
-            <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="As VECTOR"/>
+        <Grid Name="mainContentVector" Visibility="Visible" Grid.Row="2">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="Auto">
+                <TextBlock Style="{StaticResource MyTextBlockStyle}" TextWrapping="Wrap" Width="300" 
+                           Text="Enter transformation matrix as a vector in folowing format. Use '.' as decimal separator."/>
+                <TextBlock Style="{StaticResource MyTextBlockStyle}" FontStyle="Italic"
+                           Text="[[M11,M12,M13,M14];[...];[...];[M41,M42,M43,M44]]"/>
+                <TextBox Name="tbEnterMatrixAsVector" Style="{StaticResource MyTextBoxStyle}" Width="300" Text="{Binding MatrixInputAsVector}"
+                         TextChanged="tbEnterMatrixAsVector_TextChanged"/>
+            </StackPanel>
         </Grid>
 
         <Grid Name="mainContentAnglesAndTranslation" Visibility="Collapsed" Grid.Row="2">
@@ -49,7 +60,7 @@
         </Grid>
         
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3">
-            <Button Style="{StaticResource MyButtonStyle}" Name="btnOK" Content="OK" Click="btnOK_Click" IsEnabled="{Binding Valid}"/>
+            <Button Style="{StaticResource MyButtonStyle}" Name="btnOK" Content="OK" Click="btnOK_Click" IsEnabled="{Binding OKbtnIsEnabledValid}"/>
             <Button Style="{StaticResource MyButtonStyle}" Name="btnCancel" Content="Cancel" Click="btnCancel_Click"/>
         </StackPanel>
     </Grid>

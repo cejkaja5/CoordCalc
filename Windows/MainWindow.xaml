@@ -9,10 +9,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="800">
 
-    <Window.Resources>
-        <classLib:Matrix4x4ToDisplayModelConverter x:Key="MatrixConverter"/>
-    </Window.Resources>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -44,10 +40,10 @@
 
                 <Border Height="1" Background="DarkSlateGray" Margin="0,5"/>
                 <StackPanel Orientation="Horizontal">
-                    <Button Style="{StaticResource MyButtonStyle}" Name="btnAddChild" Content="Add child" Width="100" Click="btnAddChild_Click"/>
-                    <Button Style="{StaticResource MyButtonStyle}" Name="btnGoToParent" Click="btnGoToParent_Click" Content="{Binding BtnGoToParentContent}" Visibility="Collapsed"
-                            Width="130"/>
-                    <Button Style="{StaticResource MyButtonStyle}" Name="btnEdit" Content="Edit" Width="60" Click="btnEdit_Click" Visibility="Visible"/>
+                    <Button Style="{StaticResource MyButtonStyle}" Name="btnAddChild" Content="Add child" Click="btnAddChild_Click"/>
+                    <Button Style="{StaticResource MyButtonStyle}" Name="btnGoToParent" Click="btnGoToParent_Click" Content="{Binding BtnGoToParentContent}" Visibility="Collapsed"/>
+                    <Button Style="{StaticResource MyButtonStyle}" Name="btnEdit" Content="Edit" Click="btnEdit_Click" Visibility="Visible"/>
+                    <Button Style="{StaticResource MyButtonStyle}" Name="btnDelete" Content="Delete" Click="btnDelete_Click" Visibility="Visible"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

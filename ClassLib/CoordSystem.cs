@@ -94,16 +94,14 @@ namespace CoordCalc.ClassLib
 
 		public static bool IsNameValid(string name)
 		{
-            if (string.IsNullOrEmpty(name))
-            {
-                return false;
-            }
-			if (name == "0")
+			if (string.IsNullOrEmpty(name) || name == "0")
 			{
 				return false;
 			}
-
-            return name.All(c => char.IsLetterOrDigit(c) || c == '_');
+			else
+			{
+				return name.All(c => char.IsLetterOrDigit(c) || c == '_');
+			}
         }
     }
 }

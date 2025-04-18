@@ -69,7 +69,7 @@ namespace CoordCalc.ClassLib
             }
         }
 
-        static Matrix4x4 StringToMatrix(string str)
+        public static Matrix4x4 StringToMatrix(string str)
         {
             str = str.TrimStart('[').TrimEnd(']');
             string[] rows = str.Split(new string[] { "],[" }, StringSplitOptions.None);
@@ -91,6 +91,31 @@ namespace CoordCalc.ClassLib
                 matrixArray[3, 0], matrixArray[3, 1], matrixArray[3, 2], matrixArray[3, 3]
             );
             return matrix;
+        }
+
+
+        public static string MatrixToString(Matrix4x4 matrix)
+        {
+            float[,] array = new float[4, 4]
+            {
+        { matrix.M11, matrix.M12, matrix.M13, matrix.M14 },
+        { matrix.M21, matrix.M22, matrix.M23, matrix.M24 },
+        { matrix.M31, matrix.M32, matrix.M33, matrix.M34 },
+        { matrix.M41, matrix.M42, matrix.M43, matrix.M44 }
+            };
+
+            string[] rows = new string[4];
+            for (int i = 0; i < 4; i++)
+            {
+                string[] values = new string[4];
+                for (int j = 0; j < 4; j++)
+                {
+                    values[j] = array[i, j].ToString(CultureInfo.InvariantCulture);
+                }
+                rows[i] = "[" + string.Join(",", values) + "]";
+            }
+
+            return "[" + string.Join(",", rows) + "]";
         }
 
 

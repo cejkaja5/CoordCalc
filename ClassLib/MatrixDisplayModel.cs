@@ -47,6 +47,5 @@ namespace CoordCalc.ClassLib
             M43 = matrix.M43;
             M44 = matrix.M44;
         }
-
     }
 }

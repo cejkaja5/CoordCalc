@@ -9,11 +9,6 @@
         mc:Ignorable="d"
         Title="ProjectSelectorWindow" Height="200" Width="400">
 
-    <Window.Resources>
-        <classLib:Matrix4x4ToDisplayModelConverter x:Key="MatrixConverter"/>
-    </Window.Resources>
-
-
 
     <Grid>
         <Grid.RowDefinitions>

@@ -31,6 +31,7 @@ namespace CoordCalc.Windows
         {
             ParentSystem = parent;
             Matrix = new MatrixDisplayModel(matrix);
+            DataContext = this;
             InitializeComponent();
             cbAsMatrix.IsChecked = true;
         }
@@ -54,7 +55,7 @@ namespace CoordCalc.Windows
             set { _matrix = value; }
         }
 
-        public Matrix4x4  OutputMatrix
+        public Matrix4x4 OutputMatrix
         {
             get 
             {
@@ -82,17 +83,17 @@ namespace CoordCalc.Windows
             set { _success = value; }
         }
 
-        private bool _valid = false;
+        private bool _okbtnIsEnabledValid = false;
 
-        public bool Valid
+        public bool OKbtnIsEnabledValid
         {
-            get { return _valid; }
+            get { return _okbtnIsEnabledValid; }
             set 
             {
-                if (_valid != value)
+                if (_okbtnIsEnabledValid != value)
                 {
-                    _valid = value; 
-                    OnPropertyChanged(nameof(Valid));
+                    _okbtnIsEnabledValid = value; 
+                    OnPropertyChanged(nameof(OKbtnIsEnabledValid));
                 }
             }
         }
@@ -135,6 +136,7 @@ namespace CoordCalc.Windows
             cbAsAnglesAndTranslation.IsChecked = false;
             cbAsMatrix.IsChecked = false;
             mainContentVector.Visibility = Visibility.Visible;
+            MatrixInputAsVector = CoordSystemsTree.MatrixToString(OutputMatrix);
         }
 
         private void cbAsVector_Unchecked(object sender, RoutedEventArgs e)
@@ -159,12 +161,42 @@ namespace CoordCalc.Windows
             if (CoordSystem.IsNameValid(tbEnterName.Text))
             {
                 SystemName = tbEnterName.Text;
-                Valid = true;
+                OKbtnIsEnabledValid = true;
             }
             else
             {
                 SystemName = string.Empty;
-                Valid = false;
+                OKbtnIsEnabledValid = false;
+            }
+            OnPropertyChanged(nameof(OKbtnIsEnabledValid)); 
+        }
+
+        private string _matrixInputAsVector = string.Empty;
+
+        public string MatrixInputAsVector
+        {
+            get { return _matrixInputAsVector ; }
+            set 
+            {
+                if (value != _matrixInputAsVector)
+                {
+                    _matrixInputAsVector = value; 
+                    OnPropertyChanged(nameof(MatrixInputAsVector));
+                }
+            }
+        }
+
+        private void tbEnterMatrixAsVector_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                Matrix4x4 matrix = CoordSystemsTree.StringToMatrix(tbEnterMatrixAsVector.Text);
+                Matrix = new MatrixDisplayModel(matrix);
+                OnPropertyChanged(nameof(Matrix));
+            }
+            catch
+            {
+                ;
             }
         }
     }
