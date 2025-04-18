@@ -31,24 +31,23 @@
                       SelectionMode="Single" SelectionChanged="lvCoordsSystems_SelectionChanged"/>
 
             <StackPanel Grid.Column="1" HorizontalAlignment="Stretch" Margin="10" >
-                <TextBlock Text="{Binding SelectedCoordSystemNameText}" Width="Auto"/>
-                <TextBlock Text="{Binding SelectedCoordSystemParentText}" Width="Auto"/>
+                <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding SelectedCoordSystemNameText}" Width="Auto"/>
+                <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding SelectedCoordSystemParentText}" Width="Auto"/>
                 <Border Height="1" Background="DarkSlateGray" Margin="0,5"/>
-                <TextBlock Text="{Binding SelectedCoordSystemTransformationHeader}" Width="Auto"/>
+                <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding SelectedCoordSystemTransformationHeader}" Width="Auto"/>
                 <controls:MatrixDisplay Grid.Column="1" HorizontalAlignment="Left"
                                     Matrix="{Binding SelectedCoordSystem.Matrix, Converter={StaticResource MatrixConverter}}"/>
-                <TextBlock Text="{Binding SelectedCoordSystemTranslationVectorText}" Width="Auto"/>
-                <TextBlock Text="{Binding SelectedCoordSystemScaleVectorText}" Width="Auto"/>
-                <TextBlock Text="{Binding SelectedCoordSystemRotationText}" Width="Auto"/>
-                <TextBlock Text="{Binding SelectedCoordSystemEulerAnglesText}" Width="Auto"/>
+                <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding SelectedCoordSystemTranslationVectorText}" Width="Auto"/>
+                <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding SelectedCoordSystemScaleVectorText}" Width="Auto"/>
+                <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding SelectedCoordSystemRotationText}" Width="Auto"/>
+                <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding SelectedCoordSystemEulerAnglesText}" Width="Auto"/>
 
                 <Border Height="1" Background="DarkSlateGray" Margin="0,5"/>
                 <StackPanel Orientation="Horizontal">
-                    <Button Name="btnAddChild" Content="Add child" Width="100" Click="btnAddChild_Click"/>
-                    <Button Name="btnGoToParent" Click="btnGoToParent_Click" Content="{Binding BtnGoToParentContent}" Visibility="Collapsed"
-                            Width="130">
-                    </Button>
-                    <Button Name="btnEdit" Content="Edit" Width="60" Click="btnEdit_Click" Visibility="Visible"/>
+                    <Button Style="{StaticResource MyButtonStyle}" Name="btnAddChild" Content="Add child" Width="100" Click="btnAddChild_Click"/>
+                    <Button Style="{StaticResource MyButtonStyle}" Name="btnGoToParent" Click="btnGoToParent_Click" Content="{Binding BtnGoToParentContent}" Visibility="Collapsed"
+                            Width="130"/>
+                    <Button Style="{StaticResource MyButtonStyle}" Name="btnEdit" Content="Edit" Width="60" Click="btnEdit_Click" Visibility="Visible"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

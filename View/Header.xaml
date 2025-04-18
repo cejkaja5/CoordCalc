@@ -7,9 +7,9 @@
              mc:Ignorable="d" 
              Height="50" d:DesignWidth="800">
     <Grid>
-        <StackPanel Orientation="Horizontal">
-            <Button Content="File" HorizontalAlignment="Left"/>
-            <Button Content="Settings" />
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <Button Style="{StaticResource MyButtonStyle}" Content="File"/>
+            <Button Style="{StaticResource MyButtonStyle}" Content="Settings" />
         </StackPanel>
     </Grid>
     

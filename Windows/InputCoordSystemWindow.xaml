@@ -8,28 +8,49 @@
         Title="InputCoordSystemWindow" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
             <RowDefinition/>
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
+        
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <CheckBox Name="cbAsMatrix" Content="As Matrix" HorizontalAlignment="Center" HorizontalContentAlignment="Center"
-                          Width="100" VerticalAlignment="Center" VerticalContentAlignment="Center" Click="cbAsMatrix_Click"/>
 
-            </StackPanel>
+            <CheckBox Style="{StaticResource MyCheckBoxStyle}" Name="cbAsMatrix" Content="As Matrix" 
+                      Width="100" Checked="cbAsMatrix_Checked" Unchecked="cbAsMatrix_Unchecked" />
+            <CheckBox Style="{StaticResource MyCheckBoxStyle}" Name="cbAsVector" Content="As Vector" Grid.Column="1"
+                      Checked="cbAsVector_Checked" Unchecked="cbAsVector_Unchecked" />
+            <CheckBox Style="{StaticResource MyCheckBoxStyle}" Name="cbAsAnglesAndTranslation" Content="As rotation and translation" Grid.Column="2"
+                      Checked="cbAsAnglesAndTranslation_Checked" Unchecked="cbAsAnglesAndTranslation_Unchecked" />
 
         </Grid>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="Name:" TextAlignment="Right" VerticalAlignment="Center" />
+            <TextBox Style="{StaticResource MyTextBoxStyle}" Name="tbEnterName" HorizontalContentAlignment="Left" VerticalAlignment="Center" 
+                     HorizontalAlignment="Center" TextChanged="tbEnterName_TextChanged"/>
+        </StackPanel>
         
+        <Grid Name="mainContentMatrix" Visibility="Visible" Grid.Row="2">
+            <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="As MATRIX"/>
+        </Grid>
         
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2">
-            <Button Name="btnOK" Content="OK" Width="40" Click="btnOK_Click"/>
-            <Button Name="btnCancel" Content="Cancel" Width="60" Click="btnCancel_Click"/>
+        <Grid Name="mainContentVector" Visibility="Collapsed" Grid.Row="2">
+            <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="As VECTOR"/>
+        </Grid>
+
+        <Grid Name="mainContentAnglesAndTranslation" Visibility="Collapsed" Grid.Row="2">
+            <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="As ROTATION AND TRANSLATION"/>
+        </Grid>
+        
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3">
+            <Button Style="{StaticResource MyButtonStyle}" Name="btnOK" Content="OK" Click="btnOK_Click" IsEnabled="{Binding Valid}"/>
+            <Button Style="{StaticResource MyButtonStyle}" Name="btnCancel" Content="Cancel" Click="btnCancel_Click"/>
         </StackPanel>
     </Grid>
 </Window>

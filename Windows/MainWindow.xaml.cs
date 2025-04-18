@@ -248,7 +248,17 @@ namespace CoordCalc
 
         public string BtnGoToParentContent
         {
-            get { return $"Go to parent ({SelectedCoordSystem.Name})"; }
+            get 
+            {
+                if (!_selectedCoordSystem.IsRoot())
+                {
+                    return $"Go to parent ({SelectedCoordSystem.Parent.Name})";
+                }
+                else
+                {
+                    return String.Empty;
+                }
+            }
         }
 
         private void btnAddChild_Click(object sender, RoutedEventArgs e)

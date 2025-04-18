@@ -91,5 +91,19 @@ namespace CoordCalc.ClassLib
 		{
 			return _name;
 		}
+
+		public static bool IsNameValid(string name)
+		{
+            if (string.IsNullOrEmpty(name))
+            {
+                return false;
+            }
+			if (name == "0")
+			{
+				return false;
+			}
+
+            return name.All(c => char.IsLetterOrDigit(c) || c == '_');
+        }
     }
 }

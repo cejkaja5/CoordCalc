@@ -7,11 +7,12 @@
         xmlns:classLib="clr-namespace:CoordCalc.ClassLib"
         xmlns:controls="clr-namespace:CoordCalc.View"
         mc:Ignorable="d"
-        Title="ProjectSelectorWindow" Height="450" Width="800">
+        Title="ProjectSelectorWindow" Height="200" Width="400">
 
     <Window.Resources>
         <classLib:Matrix4x4ToDisplayModelConverter x:Key="MatrixConverter"/>
     </Window.Resources>
+
 
 
     <Grid>
@@ -21,12 +22,10 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Button Name="openProjectBtn" Content="Open existing project" HorizontalAlignment="Center" 
-                Click="openProjectBtn_Click" Width="250"/>
-        <Button Name="createProjectBtn" Content="Create new project" Grid.Row="1" HorizontalAlignment="Center" 
-                Click="createProjectBtn_Click" Width="180"/>
-        <TextBlock Name="txtBlockFilePath" Grid.Row="2" HorizontalAlignment="Center" Width="Auto"/>
-        <Button Name="okBtn" Grid.Row="3" HorizontalAlignment="Center" HorizontalContentAlignment="Center" 
-                Content="OK" Width="100" Click="okBtn_Click"/>
+        <Button Style="{StaticResource MyButtonStyle}" Name="openProjectBtn" Content="Open existing project" Click="openProjectBtn_Click" />
+        <Button Style="{StaticResource MyButtonStyle}" Name="createProjectBtn" Content="Create new project" Grid.Row="1" HorizontalAlignment="Center" 
+                Click="createProjectBtn_Click" />
+        <TextBlock Style="{StaticResource MyTextBlockStyle}" Name="txtBlockFilePath" Grid.Row="2" HorizontalAlignment="Center" />
+        <Button Style="{StaticResource MyButtonStyle}" Name="okBtn" Grid.Row="3" Content="OK"  Click="okBtn_Click" />
     </Grid>
 </Window>
