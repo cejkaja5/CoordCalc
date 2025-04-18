@@ -36,7 +36,9 @@
                 <TextBlock Text="{Binding SelectedCoordSystemTransformationHeader}" Width="Auto"/>
                 <controls:MatrixDisplay Grid.Column="1" HorizontalAlignment="Left"
                                     Matrix="{Binding SelectedCoordSystem.Matrix, Converter={StaticResource MatrixConverter}}"/>
-                
+                <TextBlock Text="{Binding SelectedCoordSystemTranslationVectorText}" Width="Auto"/>
+                <TextBlock Text="{Binding SelectedCoordSystemScaleVectorText}" Width="Auto"/>
+                <TextBlock Text="{Binding SelectedCoordSystemRotationText}" Width="Auto"/>
             </StackPanel>
         </Grid>
 

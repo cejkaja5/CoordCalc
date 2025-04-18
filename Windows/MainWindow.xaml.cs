@@ -60,6 +60,21 @@ namespace CoordCalc
                     OnPropertyChanged(nameof(SelectedCoordSystemNameText));
                     OnPropertyChanged(nameof(SelectedCoordSystemParentText));
                     OnPropertyChanged(nameof(SelectedCoordSystemTransformationHeader));
+                    if (Matrix4x4.Decompose(SelectedCoordSystem.Matrix, out Vector3 scaleVector,
+                        out Quaternion rotation, out Vector3 translationVector))
+                    {
+                        SelectedCoordSystemRotation = rotation;
+                        SelectedCoordSystemScaleVector = scaleVector;
+                        SelectedCoordSystemTranslationVector = translationVector;
+                        OnPropertyChanged(nameof(SelectedCoordSystemTranslationVectorText));
+                        OnPropertyChanged(nameof(SelectedCoordSystemRotationText));
+                        OnPropertyChanged(nameof(SelectedCoordSystemScaleVectorText));
+                    }
+                    else
+                    {
+                        MessageBox.Show("Decomposing transformation matrix failed", "Warning",
+                            MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
                 }
             }
         }
@@ -75,10 +90,10 @@ namespace CoordCalc
             {
                 if (SelectedCoordSystem.IsRoot())
                 {
-                    return "Root system doesnt have a parent system";
+                    return "Parent: None";
                 }
                 else
-                {
+                { 
                     return $"Parent: {SelectedCoordSystem.Parent.Name}";
                 }
             }
@@ -90,7 +105,7 @@ namespace CoordCalc
             {
                 if (SelectedCoordSystem.IsRoot())
                 {
-                    return "---No parent->child transforamtion for root system---";
+                    return "No parent->child transforamtion for root system";
                 }
                 else
                 {
@@ -99,6 +114,44 @@ namespace CoordCalc
             }
         }
 
+        private Vector3 _selectedCoordSystemTranslationVector;
+
+        public Vector3 SelectedCoordSystemTranslationVector
+        {
+            get { return _selectedCoordSystemTranslationVector; }
+            set { _selectedCoordSystemTranslationVector = value; }
+        }
+
+        public string SelectedCoordSystemTranslationVectorText
+        {
+            get { return $"Translation vector: {SelectedCoordSystemTranslationVector}"; }
+        }
+
+        private Vector3 _selectedCoordSystemScaleVector;
+
+        public Vector3 SelectedCoordSystemScaleVector
+        {
+            get { return _selectedCoordSystemScaleVector; }
+            set { _selectedCoordSystemScaleVector = value; }
+        }
+
+        public string SelectedCoordSystemScaleVectorText
+        {
+            get { return $"Scale vector: {SelectedCoordSystemScaleVector}"; }
+        }
+
+        private Quaternion _selectedCoordSystemRotation;
+
+        public Quaternion SelectedCoordSystemRotation
+        {
+            get { return _selectedCoordSystemRotation; }
+            set { _selectedCoordSystemRotation = value; }
+        }
+
+        public string SelectedCoordSystemRotationText
+        {
+            get { return $"Quaternion: {SelectedCoordSystemRotation}"; }
+        }
 
         private void lvCoordsSystems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
