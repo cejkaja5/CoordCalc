@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="CoordCalc.View.Vector3Input"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CoordCalc.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="40" d:DesignWidth="150">
+    <Border BorderBrush="Black" BorderThickness="1" Padding="0">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Grid.Resources>
+                <Style TargetType="TextBox">
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="TextAlignment" Value="Center"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="Width" Value="45"/>
+                    <Setter Property="Padding" Value="1"/>
+                </Style>
+            </Grid.Resources>
+
+            <TextBox Text="{Binding Vector.X,Converter={StaticResource FloatSafeConverter}, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
+               Grid.Row="0" Grid.Column="0" GotFocus="TextBox_SelectAllTextOnFocus"  PreviewMouseLeftButtonDown="TextBox_PreviewMouseLeftButtonDown"  Margin="2"/>
+            <TextBox Text="{Binding Vector.Y,Converter={StaticResource FloatSafeConverter}, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
+               Grid.Row="0" Grid.Column="1" GotFocus="TextBox_SelectAllTextOnFocus"  PreviewMouseLeftButtonDown="TextBox_PreviewMouseLeftButtonDown"  Margin="2"/>
+            <TextBox Text="{Binding Vector.Z,Converter={StaticResource FloatSafeConverter}, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
+               Grid.Row="0" Grid.Column="2" GotFocus="TextBox_SelectAllTextOnFocus"  PreviewMouseLeftButtonDown="TextBox_PreviewMouseLeftButtonDown"  Margin="2"/>
+         </Grid>
+    </Border>
+</UserControl>

@@ -15,7 +15,7 @@ namespace CoordCalc.ClassLib
         {
             if (value is Matrix4x4 matrix)
                 return new MatrixDisplayModel(matrix);
-            return null;
+            throw new ArgumentException("Trying to convert something that is not Matrix4x4");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

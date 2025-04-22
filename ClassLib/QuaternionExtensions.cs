@@ -16,56 +16,57 @@ namespace CoordCalc.ClassLib
 
         public static Vector3 ToEulerAngles(this Quaternion q)
         {
-            // Convert to rotation matrix
-            Matrix4x4 m = Matrix4x4.CreateFromQuaternion(q);
+            q = Quaternion.Normalize(q);
 
-            float pitch, yaw, roll;
+            float x = q.X;
+            float y = q.Y;
+            float z = q.Z;
+            float w = q.W;
 
-            // Extract Euler angles from rotation matrix
-            if (m.M31 < 1)
+            float yaw, pitch, roll;
+            // Yaw (Y-axis rotation)
+            float sinPitch = -2.0f * (y * z - w * x);
+
+
+            // Clamp to avoid NaNs due to slight overflows
+            sinPitch = Math.Clamp(sinPitch, -1.0f, 1.0f);
+
+            bool gimbalLock = MathF.Abs(sinPitch) >= 0.9999f;
+
+
+            if (gimbalLock)
             {
-                if (m.M31 > -1)
-                {
-                    pitch = MathF.Asin(-m.M31);
-                    yaw = MathF.Atan2(m.M32, m.M33);
-                    roll = MathF.Atan2(m.M21, m.M11);
-                }
-                else
-                {
-                    // m.M31 == -1
-                    pitch = MathF.PI / 2;
-                    yaw = -MathF.Atan2(-m.M12, m.M22);
-                    roll = 0;
-                }
+                // Gimbal lock: set roll = 0
+                yaw = MathF.Atan2(-2.0f * (x * z - w * y), 1.0f - 2.0f * (y * y + z * z));
+                pitch = (MathF.PI/2) * sinPitch;
+                roll = 0;
             }
             else
             {
-                // m.M31 == +1
-                pitch = -MathF.PI / 2;
-                yaw = MathF.Atan2(-m.M12, m.M22);
-                roll = 0;
+                // Regular case
+                pitch = MathF.Asin(sinPitch);
+                yaw = MathF.Atan2(2.0f * (x * z + y * w), 1.0f - 2.0f * (x * x + y * y));
+                roll = MathF.Atan2(2.0f * (x * y + w * z), 1.0f - 2.0f * (x * x + z * z));
             }
 
-            // Convert to degrees
-            Vector3 anglesDeg = new Vector3(
-                pitch * 180f / MathF.PI,
-                yaw * 180f / MathF.PI,
-                roll * 180f / MathF.PI
-            );
+            // Convert radians to degrees
+            pitch *= 180.0f / MathF.PI;
+            yaw *= 180.0f / MathF.PI;
+            roll *= 180.0f / MathF.PI;
 
-            // Normalize to [0, 360)
-            anglesDeg.X = NormalizeAngle(anglesDeg.X);
-            anglesDeg.Y = NormalizeAngle(anglesDeg.Y);
-            anglesDeg.Z = NormalizeAngle(anglesDeg.Z);
+            // Clamp yaw and roll into (-180, 180]
+            yaw = WrapAngle(yaw);
+            roll = WrapAngle(roll);
 
-            return anglesDeg;
+            return new Vector3(yaw, pitch, roll);
         }
 
-        private static float NormalizeAngle(float angle)
+        // Utility: Wrap angle to (-180, 180]
+        private static float WrapAngle(float angle)
         {
-            angle %= 360f;
-            if (angle < 0)
-                angle += 360f;
+            angle %= 360.0f;
+            if (angle <= -180.0f) angle += 360.0f;
+            else if (angle > 180.0f) angle -= 360.0f;
             return angle;
         }
     }
