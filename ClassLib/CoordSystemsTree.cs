@@ -11,6 +11,7 @@ using System.Xml.Linq;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Security.Cryptography.X509Certificates;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CoordCalc.ClassLib
 {
@@ -177,6 +178,7 @@ namespace CoordCalc.ClassLib
 
         public class Transformation
         {
+            [SetsRequiredMembers]
             public Transformation(Matrix4x4 matrix, string from, string to)
             {
                 Matrix = matrix;
@@ -186,6 +188,91 @@ namespace CoordCalc.ClassLib
             public required Matrix4x4 Matrix { get; init; }
             public required string From { get; init; }
             public required string To { get; init; }
+        }
+
+        public static string TransformationToStringOnlyNames(IReadOnlyList<Transformation> transformations)
+        {
+            int i = 0;
+            Transformation transformation = transformations[i];
+            string result = $"{transformation.From} -> {transformation.To}";
+            while (i < transformations.Count - 1)
+            {
+                i++;
+                transformation = transformations[i];
+                result += $" -> {transformation.To}";
+            }
+            return result;
+        }
+
+        public static Matrix4x4 TransformationToMatrix(IReadOnlyList<Transformation> transformations)
+        {
+            Matrix4x4 result = Matrix4x4.Identity;
+            foreach (Transformation transformation in transformations)
+            {
+                result *= transformation.Matrix;
+            }
+            return result;
+        }
+
+        public List<Transformation> GetTransformations(CoordSystem origin, CoordSystem destination)
+        {
+            Queue<CoordSystem> queue_systems = new Queue<CoordSystem>();
+            Queue<List<Transformation>> queue_paths = new Queue<List<Transformation>>();
+            queue_systems.Enqueue(origin);
+            queue_paths.Enqueue(new List<Transformation>());
+            List<CoordSystem> visited = new List<CoordSystem>();
+
+            while (queue_systems.Count > 0)
+            {
+                CoordSystem current = queue_systems.Dequeue();
+                List<Transformation> current_path = queue_paths.Dequeue();
+                visited.Add(current);
+
+                if (current == destination)
+                {
+                    if (current_path.Count == 0)
+                    {
+                        List<Transformation> trivialPath = new List<Transformation>();
+                        Transformation trivialTransformation = new Transformation(
+                            matrix: Matrix4x4.Identity, from: current.Name, to: current.Name);
+                        trivialPath.Add(trivialTransformation);
+                        return trivialPath;
+                    }
+
+                    return current_path;
+                }
+
+                if (current.Parent != null && !visited.Contains(current.Parent))
+                {
+
+                    Transformation transformationToParent = new Transformation(
+                        matrix:current.Matrix, from:current.Name, to:current.Parent.Name);
+                    queue_systems.Enqueue(current.Parent);
+                    List<Transformation> newPath = new List<Transformation>(current_path);
+                    newPath.Add(transformationToParent);
+                    queue_paths.Enqueue(newPath);
+                }
+
+                foreach (CoordSystem child in current.Children)
+                {
+                    if (visited.Contains(child))
+                    {
+                        continue;
+                    }
+
+                    Matrix4x4.Invert(child.Matrix, out Matrix4x4 inverted);
+
+                    Transformation transformationToChild = new Transformation(
+                        matrix: inverted, from: current.Name, to: child.Name);
+
+                    queue_systems.Enqueue(child);
+                    List<Transformation> newPath = new List<Transformation>(current_path);
+                    newPath.Add(transformationToChild);
+                    queue_paths.Enqueue(newPath);
+                }
+            }
+
+            throw new Exception("No path found between the two coordinate systems.");
         }
     }
 }

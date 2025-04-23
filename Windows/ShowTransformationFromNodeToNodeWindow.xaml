@@ -4,9 +4,28 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CoordCalc.Windows"
+        xmlns:controls="clr-namespace:CoordCalc.View"
         mc:Ignorable="d"
-        Title="ShowTransformationFromNodeToNodeWindow" Height="450" Width="800">
+        Title="ShowTransformationFromNodeToNodeWindow" Height="600" Width="600">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Vertical" Margin="10">
+            <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding FromToText}" />
+            <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding FullTransformationText}" />
+            
+            <controls:MatrixDisplay Grid.Column="1" HorizontalAlignment="Left"
+                                    Matrix="{Binding Matrix, Converter={StaticResource MatrixConverter}}"/>
+            <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding TranslationVectorText}" Width="Auto"/>
+            <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding ScaleVectorText}" Width="Auto"/>
+            <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding RotationText}" Width="Auto"/>
+            <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding EulerAnglesText}" Width="Auto"/>
+        </StackPanel>
+
+        <Button Name="btnClose" Style="{StaticResource MyButtonStyle}" Grid.Row="1" Content="Close"
+                Click="btnClose_Click"/>
     </Grid>
 </Window>
