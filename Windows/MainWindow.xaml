@@ -42,8 +42,14 @@
                 <StackPanel Orientation="Horizontal">
                     <Button Style="{StaticResource MyButtonStyle}" Name="btnAddChild" Content="Add child" Click="btnAddChild_Click"/>
                     <Button Style="{StaticResource MyButtonStyle}" Name="btnGoToParent" Click="btnGoToParent_Click" Content="{Binding BtnGoToParentContent}" Visibility="Collapsed"/>
-                    <Button Style="{StaticResource MyButtonStyle}" Name="btnEdit" Content="Edit" Click="btnEdit_Click" Visibility="Visible"/>
-                    <Button Style="{StaticResource MyButtonStyle}" Name="btnDelete" Content="Delete" Click="btnDelete_Click" Visibility="Visible"/>
+                    <Button Style="{StaticResource MyButtonStyle}" Name="btnEdit" Content="Edit" Click="btnEdit_Click" Visibility="Collapsed"/>
+                    <Button Style="{StaticResource MyButtonStyle}" Name="btnDelete" Content="Delete" Click="btnDelete_Click" Visibility="Collapsed"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" >
+                    <Button Style="{StaticResource MyButtonStyle}" Name="btnGetTransformationFrom" Content="{Binding BtnGetTransformationFromContent}" 
+                            Click="btnGetTransformationFrom_Click"/>
+                    <Button Style="{StaticResource MyButtonStyle}" Name="btnGetTransformationTo" Content="{Binding BtnGetTransformationToContent}" 
+                            Click="btnGetTransformationTo_Click"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

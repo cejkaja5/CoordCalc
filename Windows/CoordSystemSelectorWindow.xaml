@@ -1,0 +1,29 @@
+﻿<Window x:Class="CoordCalc.Windows.CoordSystemSelectorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CoordCalc.Windows"
+        mc:Ignorable="d"
+        Title="CoordSystemSelector" Height="450" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+
+        <ListView Name="lvCoordsSystems" Grid.Row="0" ItemsSource="{Binding CoordSystems}"  
+                      SelectionMode="Single" SelectionChanged="lvCoordsSystems_SelectionChanged"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Button Style="{StaticResource MyButtonStyle}" Name="btnOK" Content="OK" Click="btnOK_Click"/>
+            <Button Style="{StaticResource MyButtonStyle}" Name="btnCancel" Content="Cancel" Click="btnCancel_Click" Grid.Column="1"/>
+        </Grid>
+        
+        
+    </Grid>
+</Window>

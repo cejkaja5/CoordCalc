@@ -10,6 +10,7 @@ using System.Windows;
 using System.Xml.Linq;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Security.Cryptography.X509Certificates;
 
 namespace CoordCalc.ClassLib
 {
@@ -26,6 +27,11 @@ namespace CoordCalc.ClassLib
         public Collection<CoordSystem> Nodes
         {
             get { return new Collection<CoordSystem>(_nodes.Values.ToList()); }
+        }
+
+        public Collection<string> NodesNames
+        {
+            get { return new Collection<string>(_nodes.Keys.ToList()); }
         }
 
         public CoordSystemsTree(string filepath) : this()
@@ -136,6 +142,50 @@ namespace CoordCalc.ClassLib
         public CoordSystem GetRootSystem()
         {
             return _nodes["0"];
+        }
+
+        public void DeleteNodeAndDescendants(CoordSystem coordSystem)
+        {
+            if (_nodes.ContainsKey(coordSystem.Name))
+            {
+                _nodes.Remove(coordSystem.Name);
+            }
+
+            foreach (var child in coordSystem.Children.ToList())
+            {
+                DeleteNodeAndDescendants(child);
+            }
+
+            if (coordSystem.Parent != null)
+            {
+                coordSystem.Parent.Children.Remove(coordSystem);
+            }
+
+            coordSystem.Children.Clear();
+        }
+
+        public int GetNumberOfDescendants(CoordSystem coordSystem)
+        {
+            int count = 0;
+            foreach (var child in coordSystem.Children)
+            {
+                count++;
+                count += GetNumberOfDescendants(child);
+            }
+            return count;
+        }
+
+        public class Transformation
+        {
+            public Transformation(Matrix4x4 matrix, string from, string to)
+            {
+                Matrix = matrix;
+                From = from;
+                To = to;
+            }
+            public required Matrix4x4 Matrix { get; init; }
+            public required string From { get; init; }
+            public required string To { get; init; }
         }
     }
 }

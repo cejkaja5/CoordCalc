@@ -20,7 +20,7 @@
                     <Setter Property="TextAlignment" Value="Center"/>
                     <Setter Property="VerticalAlignment" Value="Center"/>
                     <Setter Property="FontSize" Value="14"/>
-                    <Setter Property="Width" Value="45"/>
+                    <Setter Property="Width" Value="{Binding TextBoxWidth, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                     <Setter Property="Padding" Value="1"/>
                 </Style>
             </Grid.Resources>

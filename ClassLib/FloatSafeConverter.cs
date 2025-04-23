@@ -13,9 +13,9 @@ namespace CoordCalc.ClassLib
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is float f)
-                return f.ToString(culture);
+                return f.ToString("F3", culture);
 
-            return "0";
+            return "0.000";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

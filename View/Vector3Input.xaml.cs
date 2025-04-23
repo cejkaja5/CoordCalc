@@ -21,6 +21,19 @@ namespace CoordCalc.View
     /// </summary>
     public partial class Vector3Input : UserControl
     {
+
+        public static readonly DependencyProperty TextBoxWidthProperty =
+            DependencyProperty.Register(
+                nameof(TextBoxWidth),
+                typeof(double),
+                typeof(Vector3Input),
+                new PropertyMetadata(45.0)); // default value
+
+        public double TextBoxWidth
+        {
+            get => (double)GetValue(TextBoxWidthProperty);
+            set => SetValue(TextBoxWidthProperty, value);
+        }
         public Vector3Input()
         {
             InitializeComponent();

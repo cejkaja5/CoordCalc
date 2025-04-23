@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Numerics;
@@ -27,22 +28,36 @@ namespace CoordCalc.Windows
     public partial class InputCoordSystemWindow : Window, INotifyPropertyChanged
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-        public InputCoordSystemWindow(Matrix4x4 matrix, CoordSystem parent)
+        public InputCoordSystemWindow(Matrix4x4 matrix, CoordSystem parent, Collection<string> takenNames, string name)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         {
             ParentSystem = parent;
             Matrix = new MatrixDisplayModel(matrix);
             DataContext = this;
+            Name = name;
+            TakenNames = takenNames;
             InitializeComponent();
+            tbEnterName.Text = name;
             cbAsMatrix.IsChecked = true;
             btnCheckValidity_Click(this, new RoutedEventArgs());
         }
 
-        public InputCoordSystemWindow(CoordSystem parent) : this(Matrix4x4.Identity, parent)
+        public InputCoordSystemWindow(CoordSystem parent, Collection<string> takenNames) : this(Matrix4x4.Identity, parent, takenNames, string.Empty)
         {
         }
 
         private MatrixDisplayModel _matrix = new MatrixDisplayModel(Matrix4x4.Identity);
+
+        private Collection<string> _takenNames;
+
+        public Collection<string> TakenNames
+        {
+            get { return _takenNames; }
+            init 
+            {
+                 _takenNames = value;
+            }
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -96,7 +111,7 @@ namespace CoordCalc.Windows
         {
             get 
             { 
-                return CoordSystem.IsNameValid(SystemName) && IsMatrixValid; 
+                return CoordSystem.IsNameValid(SystemName, TakenNames, out string message) && IsMatrixValid; 
             }
         }
          
@@ -171,12 +186,14 @@ namespace CoordCalc.Windows
 
         private void tbEnterName_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (CoordSystem.IsNameValid(tbEnterName.Text))
+            if (CoordSystem.IsNameValid(tbEnterName.Text, TakenNames, out string message))
             {
                 SystemName = tbEnterName.Text;
+                btnCheckValidity_Click(this, new RoutedEventArgs());                
             }
             else
             {
+                ValidationMessage = message;
                 SystemName = string.Empty;
             }
         }
@@ -279,6 +296,19 @@ namespace CoordCalc.Windows
 
         private void btnCheckValidity_Click(object sender, RoutedEventArgs e)
         {
+            bool nameValid = false;
+
+            if (CoordSystem.IsNameValid(tbEnterName.Text, TakenNames, out string message))
+            {
+                nameValid = true;
+                SystemName = tbEnterName.Text;
+            }
+            else
+            {
+                ValidationMessage = message;
+                SystemName = string.Empty;
+            }
+
             if (cbAsMatrix.IsChecked == true)
             {
                 tbEnterMatrixAsVector.Text = CoordSystemsTree.MatrixToString(OutputMatrix);
@@ -328,10 +358,13 @@ namespace CoordCalc.Windows
                 UpdateMatrixFromScaleTranslationQuaternion();
                 tbEnterMatrixAsVector.Text = CoordSystemsTree.MatrixToString(OutputMatrix); 
             }
-            IsMatrixValid = MatrixHelper.CheckIfMatrixIsDecomposable(OutputMatrix, out string message); 
-            ValidationMessage = message;
 
+            IsMatrixValid = MatrixHelper.CheckIfMatrixIsDecomposable(OutputMatrix, out message);
 
+            if (nameValid) //do not override name error message
+            {
+                ValidationMessage = message;
+            }
         }
 
         private bool _isMatrixValid;

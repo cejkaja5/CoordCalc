@@ -37,8 +37,6 @@ namespace CoordCalc
             opener.Close();
         }
 
-        public Matrix4x4 IdeMatrix { get; set; } = Matrix4x4.CreateRotationY(0.25f);
-
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -59,6 +57,8 @@ namespace CoordCalc
             OnPropertyChanged(nameof(SelectedCoordSystemEulerAngles));
             OnPropertyChanged(nameof(SelectedCoordSystemEulerAnglesText));
             OnPropertyChanged(nameof(BtnGoToParentContent));
+            OnPropertyChanged(nameof(BtnGetTransformationFromContent));
+            OnPropertyChanged(nameof(BtnGetTransformationToContent));
         }
 
         private CoordSystem _selectedCoordSystem;
@@ -70,7 +70,6 @@ namespace CoordCalc
                 if (_selectedCoordSystem != value) 
                 {
                     _selectedCoordSystem = value;
-                    btnGoToParent.Visibility = Visibility.Visible;
 
                     if (_selectedCoordSystem.IsRoot())
                     {
@@ -79,32 +78,48 @@ namespace CoordCalc
                         SelectedCoordSystemTranslationVector = null;
                         SelectedCoordSystemEulerAngles = null;
                         btnGoToParent.Visibility = Visibility.Collapsed;
-                    }
-
-                    else if (Matrix4x4.Decompose(SelectedCoordSystem.Matrix, out Vector3 scaleVector,
-                        out Quaternion rotation, out Vector3 translationVector))
-                    {
-                        SelectedCoordSystemRotation = rotation;
-                        SelectedCoordSystemScaleVector = scaleVector;
-                        SelectedCoordSystemTranslationVector = translationVector;
-                        SelectedCoordSystemEulerAngles = rotation.ToEulerAngles();
+                        btnEdit.Visibility = Visibility.Collapsed;
+                        btnDelete.Visibility = Visibility.Collapsed;
+                        OnPropertyChangedAllMatrixProperties();
+                        return;
                     }
 
                     else
-
                     {
-                        MatrixHelper.CheckIfMatrixIsDecomposable(SelectedCoordSystem.Matrix, out string message);
-                        MessageBox.Show($"Decomposing transformation matrix failed. Reason: {message}", "Warning",
-                            MessageBoxButton.OK, MessageBoxImage.Warning);
-                        SelectedCoordSystemRotation = null;
-                        SelectedCoordSystemScaleVector = null;
-                        SelectedCoordSystemTranslationVector = null;
-                        SelectedCoordSystemEulerAngles = null;
+                        btnGoToParent.Visibility = Visibility.Visible;
+                        btnDelete.Visibility = Visibility.Visible;
+                        btnEdit.Visibility = Visibility.Visible;
                     }
 
-                    OnPropertyChangedAllMatrixProperties();
+                    decomposeMatrixAndSetAllProperties();
                 }
             }
+        }
+
+        private void decomposeMatrixAndSetAllProperties()
+        {
+            if (Matrix4x4.Decompose(SelectedCoordSystem.Matrix, out Vector3 scaleVector,
+                out Quaternion rotation, out Vector3 translationVector))
+            {
+                SelectedCoordSystemRotation = rotation;
+                SelectedCoordSystemScaleVector = scaleVector;
+                SelectedCoordSystemTranslationVector = translationVector;
+                SelectedCoordSystemEulerAngles = rotation.ToEulerAngles();
+            }
+
+            else
+
+            {
+                MatrixHelper.CheckIfMatrixIsDecomposable(SelectedCoordSystem.Matrix, out string message);
+                MessageBox.Show($"Decomposing transformation matrix failed. Reason: {message}", "Warning",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                SelectedCoordSystemRotation = null;
+                SelectedCoordSystemScaleVector = null;
+                SelectedCoordSystemTranslationVector = null;
+                SelectedCoordSystemEulerAngles = null;
+            }
+
+            OnPropertyChangedAllMatrixProperties();
         }
 
         public string SelectedCoordSystemNameText
@@ -263,7 +278,8 @@ namespace CoordCalc
 
         private void btnAddChild_Click(object sender, RoutedEventArgs e)
         {
-            InputCoordSystemWindow window = new InputCoordSystemWindow(SelectedCoordSystem);
+            InputCoordSystemWindow window = new InputCoordSystemWindow(SelectedCoordSystem, _coordSystemTree.NodesNames);
+            window.Title = $"Add child coordinate system to {SelectedCoordSystem.Name}";
             window.ShowDialog();
             
             if (window.Success) 
@@ -277,12 +293,91 @@ namespace CoordCalc
 
         private void btnEdit_Click(object sender, RoutedEventArgs e)
         {
+            Collection<string> takenNames = _coordSystemTree.NodesNames;
+            takenNames.Remove(SelectedCoordSystem.Name);
+            InputCoordSystemWindow window = new InputCoordSystemWindow(
+                SelectedCoordSystem.Matrix, SelectedCoordSystem.Parent, takenNames, SelectedCoordSystem.Name);
+            window.Title = $"Edit coordinate system {SelectedCoordSystem.Name}";
+            window.ShowDialog();
 
+            if (window.Success)
+            { 
+                SelectedCoordSystem.Name = window.SystemName;
+                SelectedCoordSystem.Matrix = window.OutputMatrix;
+
+                decomposeMatrixAndSetAllProperties();
+             }
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
+            if (SelectedCoordSystem.IsRoot())
+            {
+                MessageBox.Show("You cannot delete the root coordinate system", "Warning",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
+            int numOfDescendants = _coordSystemTree.GetNumberOfDescendants(SelectedCoordSystem);
+
+            MessageBoxResult result = MessageBox.Show(
+                $"Are you sure you want to delete {SelectedCoordSystem.Name} and all its {numOfDescendants} descendants?" +
+                $"This action is ireversible.",
+                "Delete confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.No) return;
+
+            CoordSystem parent = SelectedCoordSystem.Parent;
+            _coordSystemTree.DeleteNodeAndDescendants(SelectedCoordSystem);
+            lvCoordsSystems.SelectedItem = parent;
+            OnPropertyChanged(nameof(CoordSystems));
+            OnPropertyChangedAllMatrixProperties();    
+        }
+
+        private void btnGetTransformationTo_Click(object sender, RoutedEventArgs e)
+        {
+            CoordSystemSelectorWindow selector = new CoordSystemSelectorWindow(_coordSystemTree);
+            selector.Title = "Select origin coordinate system";
+            selector.ShowDialog();
+
+            if (selector.Success)
+            {
+                ShowTransformationFromNodeToNodeWindow window =
+                    new ShowTransformationFromNodeToNodeWindow(selector.SelectedCoordSystem, SelectedCoordSystem, _coordSystemTree);
+                window.ShowDialog();
+            }
+            else
+            {
+                return;
+            }
+        }
+         
+        private void btnGetTransformationFrom_Click(object sender, RoutedEventArgs e)
+        {
+            CoordSystemSelectorWindow selector = new CoordSystemSelectorWindow(_coordSystemTree);
+            selector.Title = "Select destination coordinate system";
+            selector.ShowDialog();
+
+            if (selector.Success)
+            {
+                ShowTransformationFromNodeToNodeWindow window =
+                    new ShowTransformationFromNodeToNodeWindow(SelectedCoordSystem, selector.SelectedCoordSystem, _coordSystemTree);
+                window.ShowDialog();
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        public string BtnGetTransformationFromContent
+        {
+            get { return $"Get transformation from {SelectedCoordSystem.Name}"; }
+        }
+
+        public string BtnGetTransformationToContent
+        {
+            get { return $"Get transformation to {SelectedCoordSystem.Name}"; }
         }
     }
 }
