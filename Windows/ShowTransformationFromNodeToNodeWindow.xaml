@@ -58,7 +58,13 @@
             </Grid>
         </StackPanel>
 
-        <Button Name="btnClose" Style="{StaticResource MyButtonStyle}" Grid.Row="1" Content="Close"
-                Click="btnClose_Click"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Name="btnShowStepByStepTransformation" Style="{StaticResource MyButtonStyle}" 
+                    Content="Show transformation step by step" Click="btnShowStepByStepTransformation_Click"/>
+
+            <Button Name="btnClose" Style="{StaticResource MyButtonStyle}" Content="Close"
+                    Click="btnClose_Click"/>
+        </StackPanel>
+
     </Grid>
 </Window>

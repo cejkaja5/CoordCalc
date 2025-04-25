@@ -13,6 +13,7 @@ using CoordCalc.ClassLib;
 using CoordCalc.Windows;
 using System.Numerics;
 using System.ComponentModel;
+using System.IO;
 
 namespace CoordCalc
 {
@@ -393,17 +394,26 @@ namespace CoordCalc
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-
+            _coordSystemTree.WriteIntoFile(FilePath);
         }
 
         private void btnSaveAsCopy_Click(object sender, RoutedEventArgs e)
         {
 
+            CreateFileInputWindow window = new CreateFileInputWindow();
+            window.ShowDialog();
+            if (window.Success)
+            {
+                string newFilePath = window.FilePath;
+
+                _coordSystemTree.WriteIntoFile(newFilePath);
+            }
         }
 
         private void btnSaveAndExit_Click(object sender, RoutedEventArgs e)
         {
-
+            _coordSystemTree.WriteIntoFile(FilePath);
+            Close();
         }
 
         private void btnSettings_Click(object sender, RoutedEventArgs e)

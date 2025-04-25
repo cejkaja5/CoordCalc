@@ -46,7 +46,7 @@ namespace CoordCalc.Windows
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 Close();
             }
 
@@ -63,11 +63,11 @@ namespace CoordCalc.Windows
             {
                 MatrixHelper.CheckIfMatrixIsDecomposable(Matrix, out string message);
                 MessageBox.Show($"Matrix decomposition failed. Matrix validity status: {message}", 
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                TranslationVectorText = "Translation vector: Error";
-                ScaleVectorText = "Scale vector: Error";
-                RotationText = "Quaternion: Error";
-                EulerAnglesText = "Euler angles in degrees: Error";
+                    "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                TranslationVectorText = "Translation vector: None";
+                ScaleVectorText = "Scale vector: None";
+                RotationText = "Quaternion: None";
+                EulerAnglesText = "Euler angles in degrees: None";
             }
         }
 
@@ -271,6 +271,12 @@ namespace CoordCalc.Windows
             Vector4 v = VectorToBeTransformed.ToVector4();
             Vector4 result = v.TransformAsRowVector(Matrix);
             TransformedVectorText = (new Vector3(result.X, result.Y, result.Z)).ToCustomString();
+        }
+
+        private void btnShowStepByStepTransformation_Click(object sender, RoutedEventArgs e)
+        {
+            TransformationStepByStepWindow window = new TransformationStepByStepWindow(TransformationsList);
+            window.ShowDialog();
         }
     } 
 }

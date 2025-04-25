@@ -188,6 +188,10 @@ namespace CoordCalc.ClassLib
             public required Matrix4x4 Matrix { get; init; }
             public required string From { get; init; }
             public required string To { get; init; }
+            public string FromToText
+            {
+                get { return $"{From} -> {To}"; }
+            }
         }
 
         public static string TransformationToStringOnlyNames(IReadOnlyList<Transformation> transformations)
@@ -273,6 +277,55 @@ namespace CoordCalc.ClassLib
             }
 
             throw new Exception("No path found between the two coordinate systems.");
+        }
+
+        public void WriteIntoFile(string path)
+        {
+            string message = string.Empty;
+            try
+            {
+                using (var writer = new StreamWriter(path, append: false))
+                {
+                    Queue<CoordSystem> queue = new Queue<CoordSystem>();
+                    foreach (var child in GetRootSystem().Children)
+                    {
+                        queue.Enqueue(child);
+                    }
+
+                    while (queue.Count > 0)
+                    {
+                        CoordSystem current = queue.Dequeue();
+                        writer.WriteLine($"{current.Name}:{current.Parent.Name}");
+                        writer.WriteLine(MatrixToString(current.Matrix));
+                        foreach (var child in current.Children)
+                        {
+                            queue.Enqueue(child);
+                        }
+                    }
+                }
+            }
+            catch (IOException ioEx)
+            {
+                message = $"IO error: {ioEx.Message}";
+            }
+            catch (UnauthorizedAccessException uaEx)
+            {
+                message = $"Permission error: {uaEx.Message}";
+            }
+            catch (Exception ex)
+            {
+                message = $"Unexpected error: {ex.Message}";
+            }
+            if (message != string.Empty)
+            {
+                MessageBox.Show($"An exception when trying to write into {path} occured:\n"
+                    + message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                MessageBox.Show($"Project was saved to {path} successfully", "Success",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
     }
 }

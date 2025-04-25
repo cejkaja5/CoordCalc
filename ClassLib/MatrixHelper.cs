@@ -41,8 +41,8 @@ namespace CoordCalc.ClassLib
 
             if (Math.Abs(dot01) > 0.01f || Math.Abs(dot02) > 0.01f || Math.Abs(dot12) > 0.01f)
             {
-                message = "INVALID: Matrix may contain skew (non-orthogonal basis vectors)";
-                return false;
+                message = "WARNING: Matrix may contain skew (non-orthogonal basis vectors)";
+                return true;
             }
 
             message = "Matrix is valid";

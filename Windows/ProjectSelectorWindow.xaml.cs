@@ -32,7 +32,6 @@ namespace CoordCalc.Windows
             DataContext = this;
         }
 
-        private string _filePath;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -41,6 +40,7 @@ namespace CoordCalc.Windows
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private string _filePath;
         public string FilePath
         {
             get { return _filePath; }
@@ -89,17 +89,38 @@ namespace CoordCalc.Windows
 
         private void createProjectBtn_Click(object sender, RoutedEventArgs e)
         {
+            CreateFileInputWindow window = new CreateFileInputWindow();
+            window.ShowDialog();
 
+            if (window.Success)
+            {
+                FilePath = window.FilePath;
+                OkBtnEnabled = true;
+            }
         }
 
         private void okBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (FilePath != String.Empty && File.Exists(FilePath)) 
+            if (!File.Exists(FilePath))
             {
-                CoordSystemsTree coordSystemsTree = new CoordSystemsTree(FilePath);
-                MainWindow mainWindow = new MainWindow(coordSystemsTree, this);
-                mainWindow.Show();
+                try 
+                {
+                    using (File.Create(FilePath))
+                    {
+                        // Blank file created
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error creating file: {ex.Message}");
+                    return;
+                }
             }
+            
+            CoordSystemsTree coordSystemsTree = new CoordSystemsTree(FilePath);
+            MainWindow mainWindow = new MainWindow(coordSystemsTree, this);
+            mainWindow.Show();
+            
         }
     }
 }
