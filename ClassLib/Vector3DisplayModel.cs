@@ -23,6 +23,11 @@ namespace CoordCalc.ClassLib
             return new Vector3(X, Y, Z);
         }
 
+        public Vector4 ToVector4()
+        {
+            return new Vector4(X, Y, Z, 1);
+        }
+
         public (float yaw, float pitch, float roll) ToEulerAngles()
         {
             float ToRadians(float degrees) => MathF.PI* degrees / 180f;

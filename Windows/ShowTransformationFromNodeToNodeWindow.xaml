@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CoordCalc.Windows"
         xmlns:controls="clr-namespace:CoordCalc.View"
         mc:Ignorable="d"
-        Title="ShowTransformationFromNodeToNodeWindow" Height="600" Width="600">
+        Title="ShowTransformationFromNodeToNodeWindow" Height="650" Width="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -16,6 +16,7 @@
         <StackPanel Orientation="Vertical" Margin="10">
             <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding FromToText}" />
             <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding FullTransformationText}" />
+            <Border Height="1" Background="DarkSlateGray" Margin="0,5"/>
             
             <controls:MatrixDisplay Grid.Column="1" HorizontalAlignment="Left"
                                     Matrix="{Binding Matrix, Converter={StaticResource MatrixConverter}}"/>
@@ -23,6 +24,38 @@
             <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding ScaleVectorText}" Width="Auto"/>
             <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding RotationText}" Width="Auto"/>
             <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding EulerAnglesText}" Width="Auto"/>
+            <Border Height="1" Background="DarkSlateGray" Margin="0,5"/>
+
+            <Grid Height="120">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.8*"/>
+                    <RowDefinition Height="0.6*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.4*"/>
+                        <RowDefinition Height="0.6*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="Enter vector to be transformed:" Grid.Row="0" 
+                           Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="Transformed vector:" Grid.Row="0" 
+                           Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <controls:Vector3Input Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Vector="{Binding VectorToBeTransformed}"/>
+                <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding TransformedVectorText}" Grid.Row="1" 
+                           Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                </Grid>
+
+                <Button Style="{StaticResource MyButtonStyle}" Content="Calculate" HorizontalAlignment="Center" Grid.Row="1"
+                        Name="btnCalculate" VerticalAlignment="Center" Click="btnCalculate_Click"/>
+            </Grid>
         </StackPanel>
 
         <Button Name="btnClose" Style="{StaticResource MyButtonStyle}" Grid.Row="1" Content="Close"

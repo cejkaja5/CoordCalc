@@ -15,7 +15,14 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <controls:Header Grid.Row="0"/>
+        
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Row="0">
+            <Button Name="btnSave" Style="{StaticResource MyButtonStyle}" Content="Save" Click="btnSave_Click"/>
+            <Button Name="btnSaveAsCopy" Style="{StaticResource MyButtonStyle}" Content="Save as copy" Click="btnSaveAsCopy_Click"/>
+            <Button Name="btnSaveAndExit" Style="{StaticResource MyButtonStyle}" Content="Save and exit" Click="btnSaveAndExit_Click"/>
+            <Button Name="btnSettings" Style="{StaticResource MyButtonStyle}" Content="Settings" Click="btnSettings_Click"/>
+        </StackPanel>
+        
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.3*"/>

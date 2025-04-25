@@ -20,7 +20,7 @@
         <Button Style="{StaticResource MyButtonStyle}" Name="openProjectBtn" Content="Open existing project" Click="openProjectBtn_Click" />
         <Button Style="{StaticResource MyButtonStyle}" Name="createProjectBtn" Content="Create new project" Grid.Row="1" HorizontalAlignment="Center" 
                 Click="createProjectBtn_Click" />
-        <TextBlock Style="{StaticResource MyTextBlockStyle}" Name="txtBlockFilePath" Grid.Row="2" HorizontalAlignment="Center" />
-        <Button Style="{StaticResource MyButtonStyle}" Name="okBtn" Grid.Row="3" Content="OK"  Click="okBtn_Click" />
+        <TextBlock Style="{StaticResource MyTextBlockStyle}" Name="txtBlockFilePath" Text="{Binding FilePath}" Grid.Row="2" HorizontalAlignment="Center" />
+        <Button Style="{StaticResource MyButtonStyle}" Name="okBtn" Grid.Row="3" Content="OK"  Click="okBtn_Click" IsEnabled="{Binding OkBtnEnabled}"/>
     </Grid>
 </Window>

@@ -15,13 +15,15 @@ using System.Windows.Shapes;
 using CoordCalc.ClassLib;
 using Microsoft.Win32;
 using System.Numerics;
+using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace CoordCalc.Windows
 {
     /// <summary>
     /// Interaction logic for ProjectSelectorWindow.xaml
     /// </summary>
-    public partial class ProjectSelectorWindow : Window
+    public partial class ProjectSelectorWindow : Window, INotifyPropertyChanged
     {
         public ProjectSelectorWindow()
         {
@@ -32,6 +34,13 @@ namespace CoordCalc.Windows
 
         private string _filePath;
 
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         public string FilePath
         {
             get { return _filePath; }
@@ -40,15 +49,30 @@ namespace CoordCalc.Windows
                 _filePath = value;
                 if (_filePath != String.Empty) 
                 {
-                    okBtn.IsEnabled = true;
+                    OkBtnEnabled = true;
+                    OnPropertyChanged(nameof(FilePath));
                 }
                 else
                 {
-                    okBtn.IsEnabled = false;
+                    OkBtnEnabled = false;
                 }
             }
         }
 
+        private bool _okBtnEnabled = false;
+
+        public bool OkBtnEnabled
+        {
+            get { return _okBtnEnabled; }
+            set
+            { 
+                if (value != _okBtnEnabled)
+                {
+                    _okBtnEnabled = value; 
+                    OnPropertyChanged(nameof(OkBtnEnabled));
+                }
+            }
+        }
 
         private void openProjectBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -60,7 +84,6 @@ namespace CoordCalc.Windows
             { 
                 string path = fileDialog.FileName;
                 FilePath = path;
-                txtBlockFilePath.Text = path;
             }
         }
 

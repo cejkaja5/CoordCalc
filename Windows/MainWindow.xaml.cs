@@ -27,13 +27,16 @@ namespace CoordCalc
         {
             get { return _coordSystemTree.Nodes; }
         }
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         public MainWindow(CoordSystemsTree tree, ProjectSelectorWindow opener)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         {
             _coordSystemTree = tree;
             _selectedCoordSystem = tree.GetRootSystem();
             DataContext = this;
             InitializeComponent();
             lvCoordsSystems.SelectedItem = _selectedCoordSystem;
+            FilePath = opener.FilePath;
             opener.Close();
         }
 
@@ -59,6 +62,14 @@ namespace CoordCalc
             OnPropertyChanged(nameof(BtnGoToParentContent));
             OnPropertyChanged(nameof(BtnGetTransformationFromContent));
             OnPropertyChanged(nameof(BtnGetTransformationToContent));
+        }
+
+        private string _filePath;
+
+        public string FilePath
+        {
+            get { return _filePath; }
+            set { _filePath = value; }
         }
 
         private CoordSystem _selectedCoordSystem;
@@ -321,7 +332,7 @@ namespace CoordCalc
             int numOfDescendants = _coordSystemTree.GetNumberOfDescendants(SelectedCoordSystem);
 
             MessageBoxResult result = MessageBox.Show(
-                $"Are you sure you want to delete {SelectedCoordSystem.Name} and all its {numOfDescendants} descendants?" +
+                $"Are you sure you want to delete {SelectedCoordSystem.Name} and all its {numOfDescendants} descendants? " +
                 $"This action is ireversible.",
                 "Delete confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
@@ -378,6 +389,26 @@ namespace CoordCalc
         public string BtnGetTransformationToContent
         {
             get { return $"Get transformation to {SelectedCoordSystem.Name}"; }
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnSaveAsCopy_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnSaveAndExit_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnSettings_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

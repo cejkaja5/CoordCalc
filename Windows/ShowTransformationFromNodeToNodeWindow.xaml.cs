@@ -233,5 +233,44 @@ namespace CoordCalc.Windows
         {
             Close();
         }
+
+        private Vector3DisplayModel _vectorToBeTransformed = new Vector3DisplayModel(new Vector3(0,0,0));
+
+        public Vector3DisplayModel VectorToBeTransformed
+        {
+            get { return _vectorToBeTransformed; }
+            set
+            {
+                if (_vectorToBeTransformed != value)
+                {
+                    _vectorToBeTransformed = value;
+                    OnPropertyChanged(nameof(VectorToBeTransformed));
+                } 
+            }
+        }
+
+        private string _transformedVectorText = string.Empty;
+        public string TransformedVectorText
+        {
+            get
+            {
+                return _transformedVectorText;
+            }
+            set
+            {
+                if (_transformedVectorText != value)
+                {
+                    _transformedVectorText = value;
+                    OnPropertyChanged(nameof(TransformedVectorText));
+                }
+            }
+        }
+
+        private void btnCalculate_Click(object sender, RoutedEventArgs e)
+        {
+            Vector4 v = VectorToBeTransformed.ToVector4();
+            Vector4 result = v.TransformAsRowVector(Matrix);
+            TransformedVectorText = (new Vector3(result.X, result.Y, result.Z)).ToCustomString();
+        }
     } 
 }
