@@ -101,5 +101,11 @@ namespace CoordCalc.Windows
                 mainWindow.Show();
             }
         }
+
+        private void usslessMethod()
+        {
+            // To create commit in git
+            return;
+        }
     }
 }
