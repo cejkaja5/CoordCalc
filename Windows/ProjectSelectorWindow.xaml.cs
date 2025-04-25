@@ -94,7 +94,7 @@ namespace CoordCalc.Windows
 
         private void okBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (FilePath != String.Empty && File.Exists(FilePath)) 
+            if (File.Exists(FilePath)) 
             {
                 CoordSystemsTree coordSystemsTree = new CoordSystemsTree(FilePath);
                 MainWindow mainWindow = new MainWindow(coordSystemsTree, this);
