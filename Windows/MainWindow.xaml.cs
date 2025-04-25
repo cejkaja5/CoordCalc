@@ -33,9 +33,11 @@ namespace CoordCalc
         {
             _coordSystemTree = tree;
             _selectedCoordSystem = tree.GetRootSystem();
+            RootNode = new TreeViewModel(_coordSystemTree.GetRootSystem());
             DataContext = this;
             InitializeComponent();
-            lvCoordsSystems.SelectedItem = _selectedCoordSystem;
+            //lvCoordsSystems.SelectedItem = _selectedCoordSystem;
+            tvCoordSystemSelectItem(_selectedCoordSystem);
             FilePath = opener.FilePath;
             opener.Close();
         }
@@ -260,16 +262,17 @@ namespace CoordCalc
             }
         }
 
-        private void lvCoordsSystems_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            SelectedCoordSystem = (CoordSystem)lvCoordsSystems.SelectedItem;
-        }
+        //private void lvCoordsSystems_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    SelectedCoordSystem = (CoordSystem)lvCoordsSystems.SelectedItem;
+        //}
 
         private void btnGoToParent_Click(object sender, RoutedEventArgs e)
         {
             if (_selectedCoordSystem.IsRoot()) return;
 
-            lvCoordsSystems.SelectedItem = _selectedCoordSystem.Parent;
+            //lvCoordsSystems.SelectedItem = _selectedCoordSystem.Parent;
+            tvCoordSystemSelectItem(_selectedCoordSystem.Parent);
         }
 
         public string BtnGoToParentContent
@@ -298,7 +301,9 @@ namespace CoordCalc
                 CoordSystem child = new CoordSystem(window.OutputMatrix, window.SystemName, SelectedCoordSystem);
                 _coordSystemTree.AddNode(child);
                 OnPropertyChanged(nameof(CoordSystems));
-                lvCoordsSystems.SelectedItem = child;
+                OnPropertyChanged(nameof(RootNode.RootNodes));
+                //lvCoordsSystems.SelectedItem = child;
+                tvCoordSystemSelectItem(child);
             }
         }
 
@@ -317,7 +322,9 @@ namespace CoordCalc
                 SelectedCoordSystem.Matrix = window.OutputMatrix;
 
                 decomposeMatrixAndSetAllProperties();
-             }
+                OnPropertyChanged(nameof(CoordSystems));
+                OnPropertyChanged(nameof(RootNode.RootNodes));
+            }
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
@@ -340,8 +347,10 @@ namespace CoordCalc
 
             CoordSystem parent = SelectedCoordSystem.Parent;
             _coordSystemTree.DeleteNodeAndDescendants(SelectedCoordSystem);
-            lvCoordsSystems.SelectedItem = parent;
+            //lvCoordsSystems.SelectedItem = parent;
+            tvCoordSystemSelectItem(parent);
             OnPropertyChanged(nameof(CoordSystems));
+            OnPropertyChanged(nameof(RootNode.RootNodes));
             OnPropertyChangedAllMatrixProperties();    
         }
 
@@ -409,6 +418,62 @@ namespace CoordCalc
         private void btnSettings_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private TreeViewModel _rootNode;
+        public TreeViewModel RootNode
+        {
+            get { return _rootNode; }
+            init 
+            {
+                _rootNode = value;
+                OnPropertyChanged(nameof(RootNode.RootNodes));
+            }
+        }
+
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            var selectedItem = e.NewValue as CoordSystem;
+            if (selectedItem != null)
+            {
+                SelectedCoordSystem = selectedItem;
+            }
+        }
+
+        private TreeViewItem? GetTreeViewItem(ItemsControl container, object item)
+        {
+            if (container == null) return null;
+
+            for (int i = 0; i < container.Items.Count; i++)
+            {
+                var currentItem = container.ItemContainerGenerator.ContainerFromIndex(i) as TreeViewItem;
+                if (currentItem == null) continue;
+
+                if (currentItem.DataContext == item)
+                    return currentItem;
+
+                // Expand node and recurse
+                if (currentItem.Items.Count > 0)
+                {
+                    currentItem.IsExpanded = true; // make sure child containers are generated
+                    var child = GetTreeViewItem(currentItem, item);
+                    if (child != null)
+                        return child;
+                }
+            }
+            return null;
+        }
+
+        private void tvCoordSystemSelectItem(object item)
+        {
+            if (item == null) return;
+            var treeViewItem = GetTreeViewItem(tvCoordSystems, item);
+            if (treeViewItem != null)
+            {
+                treeViewItem.BringIntoView();
+                treeViewItem.Focus();
+                treeViewItem.IsSelected = true;
+            }
         }
     }
 }

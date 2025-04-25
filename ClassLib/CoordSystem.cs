@@ -50,7 +50,6 @@ namespace CoordCalc.ClassLib
 			get { return _parent!; }
 		}
 
-		private List<CoordSystem> _children;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -59,6 +58,7 @@ namespace CoordCalc.ClassLib
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
+		private List<CoordSystem> _children;
         public List<CoordSystem> Children
 		{
 			get { return _children; }

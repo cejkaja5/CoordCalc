@@ -102,7 +102,7 @@ namespace CoordCalc.Windows
             }
         }
 
-        private void usslessMethod()
+        private void uselessMethod()
         {
             // To create commit in git
             return;
