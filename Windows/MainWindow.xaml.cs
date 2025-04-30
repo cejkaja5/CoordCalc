@@ -34,6 +34,7 @@ namespace CoordCalc
             _coordSystemTree = tree;
             _selectedCoordSystem = tree.GetRootSystem();
             RootNode = new TreeViewModel(_coordSystemTree.GetRootSystem());
+            Root = new ObservableCollection<CoordSystem> { _coordSystemTree.GetRootSystem() };
             DataContext = this;
             InitializeComponent();
             //lvCoordsSystems.SelectedItem = _selectedCoordSystem;
@@ -430,6 +431,18 @@ namespace CoordCalc
                 OnPropertyChanged(nameof(RootNode.RootNodes));
             }
         }
+
+        private ObservableCollection<CoordSystem> _root;
+        public ObservableCollection<CoordSystem> Root
+        {
+            get { return _root; }
+            init 
+            {
+                _root = value; 
+                OnPropertyChanged(nameof(Root));
+            }
+        }
+
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {

@@ -58,8 +58,8 @@ namespace CoordCalc.ClassLib
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
-		private List<CoordSystem> _children;
-        public List<CoordSystem> Children
+		private ObservableCollection<CoordSystem> _children;
+        public ObservableCollection<CoordSystem> Children
 		{
 			get { return _children; }
 		}
@@ -68,14 +68,14 @@ namespace CoordCalc.ClassLib
 		{
 			Children.Add(child);
 			OnPropertyChanged(nameof(Children));
-		}
+        }
 
 		public CoordSystem(Matrix4x4 matrix, string name, CoordSystem? parent) 
 		{
 			_matrix = matrix;
 			_name = name;
 			_parent = parent;
-			_children = new List<CoordSystem>();
+			_children = new ObservableCollection<CoordSystem>();
 			if (parent != null)
             {
                 parent.AddChild(this);
