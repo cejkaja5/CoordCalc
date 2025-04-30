@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CoordCalc.Windows"
         xmlns:controls="clr-namespace:CoordCalc.View"
         mc:Ignorable="d"
-        Title="InputCoordSystemWindow" Height="450" Width="400">
+        Title="InputCoordSystemWindow" Height="500" Width="400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -62,11 +62,15 @@
                 <controls:Vector3Input Vector="{Binding TranslationVector}" Width="Auto" HorizontalAlignment="Center"/>
                 <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="Enter scale vector:" HorizontalAlignment="Center"/>
                 <controls:Vector3Input  Vector="{Binding ScaleVector}" Width="Auto" HorizontalAlignment="Center"/>
-                <CheckBox Name="cbEulerAngles" Style="{StaticResource MyCheckBoxStyle}" Content="Euler angles (in deg)" Width="Auto" 
+                <CheckBox Name="cbEulerAngles" Style="{StaticResource MyCheckBoxStyle}" Content="Yaw pitch roll (in deg)" Width="Auto" 
                           Checked="cbEulerAngles_Checked" Unchecked="cbEulerAngles_Unchecked"/>
+                <CheckBox Name="cbEulerAnglesRadians" Style="{StaticResource MyCheckBoxStyle}" Content="Yaw pitch roll (in rad)" Width="Auto" 
+                          Checked="cbEulerAnglesRadians_Checked" Unchecked="cbEulerAnglesRadians_Unchecked"/>
                 <CheckBox Name="cbQuaternion" Style="{StaticResource MyCheckBoxStyle}" Content="Quaternion" Width="Auto"
                           Checked="cbQuaternion_Checked" Unchecked="cbQuaternion_Unchecked"/>
                 <controls:Vector3Input x:Name="eulerAnglesInputField" Vector="{Binding EulerAnglesVector}" Visibility="Collapsed" 
+                                       Width="215" HorizontalAlignment="Center" TextBoxWidth="65" />
+                <controls:Vector3Input x:Name="eulerAnglesInputFieldRadians" Vector="{Binding EulerAnglesVectorRadians}" Visibility="Collapsed" 
                                        Width="215" HorizontalAlignment="Center" TextBoxWidth="65" />
                 <controls:QuaternionInput x:Name="quaternionInputField" Quat="{Binding RotationQuaternion}" Visibility="Collapsed"
                                           Width="Auto" HorizontalAlignment="Center"/>

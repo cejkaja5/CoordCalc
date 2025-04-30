@@ -62,6 +62,7 @@ namespace CoordCalc
             OnPropertyChanged(nameof(SelectedCoordSystemScaleVectorText));
             OnPropertyChanged(nameof(SelectedCoordSystemEulerAngles));
             OnPropertyChanged(nameof(SelectedCoordSystemEulerAnglesText));
+            OnPropertyChanged(nameof(SelectedCoordSystemEulerAnglesRadText));
             OnPropertyChanged(nameof(BtnGoToParentContent));
             OnPropertyChanged(nameof(BtnGetTransformationFromContent));
             OnPropertyChanged(nameof(BtnGetTransformationToContent));
@@ -239,11 +240,26 @@ namespace CoordCalc
             {
                 if (SelectedCoordSystemEulerAngles != null)
                 {
-                    return $"Euler angles in degrees: {((Vector3)SelectedCoordSystemEulerAngles).ToEulerAnglesString()}";
+                    return $"Yaw pitch roll (in deg): {((Vector3)SelectedCoordSystemEulerAngles).ToCustomString()}";
                 }
                 else
                 {
-                    return "Euler angles: None";
+                    return "Yaw pitch roll (in deg): None";
+                }
+            }
+        }
+
+        public string SelectedCoordSystemEulerAnglesRadText
+        {
+            get
+            {
+                if (SelectedCoordSystemEulerAngles != null)
+                {
+                    return $"Yaw pitch roll (in rad): {((Vector3)SelectedCoordSystemEulerAngles).DegreesToRadians().ToCustomString()}";
+                }
+                else
+                {
+                    return "Yaw pitch roll (in rad): None";
                 }
             }
         }

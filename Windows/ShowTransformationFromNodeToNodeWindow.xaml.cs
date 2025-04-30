@@ -35,6 +35,7 @@ namespace CoordCalc.Windows
             FromToText = $"Transformation from {origin.Name} to {destination.Name}";
             this.Title = FromToText;
             CalculateAndDisplayTransformation();
+            btnCalculate_Click(this, new RoutedEventArgs());
         }
 
         private void CalculateAndDisplayTransformation()
@@ -57,7 +58,9 @@ namespace CoordCalc.Windows
                 TranslationVectorText = "Translation vector: " + translation.ToCustomString();
                 ScaleVectorText = "Scale vector: " + scale.ToCustomString();
                 RotationText = "Quaternion: " + rotation.ToCustomString();
-                EulerAnglesText = "Euler angles in degrees: " + rotation.ToEulerAngles().ToEulerAnglesString();
+                EulerAnglesText = "Yaw pitch roll (in deg): " + rotation.ToEulerAngles().ToCustomString();
+                EulerAnglesRadText = "Yaw pitch roll (in rad): " + rotation.ToEulerAngles().DegreesToRadians().ToCustomString();
+
             }
             else
             {
@@ -67,7 +70,8 @@ namespace CoordCalc.Windows
                 TranslationVectorText = "Translation vector: Error";
                 ScaleVectorText = "Scale vector: Error";
                 RotationText = "Quaternion: Error";
-                EulerAnglesText = "Euler angles in degrees: Error";
+                EulerAnglesText = "Yaw pitch roll (in deg): Error";
+                EulerAnglesRadText = "Yaw pitch roll (in rad): Error";
             }
         }
 
@@ -171,10 +175,26 @@ namespace CoordCalc.Windows
                 if (_eulerAnglesText != value)
                 {
                     _eulerAnglesText = value;
-                    OnPropertyChanged(nameof(EulerAnglesText));
+                    OnPropertyChanged(nameof(EulerAnglesText)); 
                 }
             }
         }
+
+        private string _eulerAnglesRadText;
+
+        public string EulerAnglesRadText
+        {
+            get { return _eulerAnglesRadText; }
+            set
+            {
+                if (_eulerAnglesRadText != value)
+                {
+                    _eulerAnglesRadText = value;
+                    OnPropertyChanged(nameof(EulerAnglesRadText));
+                }
+            }  
+        }
+
 
         private Matrix4x4 _matrix = Matrix4x4.Identity;
 

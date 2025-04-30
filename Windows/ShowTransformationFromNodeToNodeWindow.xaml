@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CoordCalc.Windows"
         xmlns:controls="clr-namespace:CoordCalc.View"
         mc:Ignorable="d"
-        Title="ShowTransformationFromNodeToNodeWindow" Height="650" Width="600">
+        Title="ShowTransformationFromNodeToNodeWindow" Height="700" Width="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -24,6 +24,7 @@
             <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding ScaleVectorText}" Width="Auto"/>
             <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding RotationText}" Width="Auto"/>
             <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding EulerAnglesText}" Width="Auto"/>
+            <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding EulerAnglesRadText}" Width="Auto"/>
             <Border Height="1" Background="DarkSlateGray" Margin="0,5"/>
 
             <Grid Height="120">

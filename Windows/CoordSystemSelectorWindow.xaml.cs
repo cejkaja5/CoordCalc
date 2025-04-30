@@ -35,11 +35,26 @@ namespace CoordCalc.Windows
             _systemsTree = systemsTree;
             DataContext = this;
             InitializeComponent();
-            SelectedCoordSystem = systemsTree.GetRootSystem();
-            lvCoordsSystems.SelectedItem = SelectedCoordSystem;
+            Root = new ObservableCollection<CoordSystem> {
+                systemsTree.GetRootSystem()
+            };
+            tvCoordSystemSelectItem(Root[0]);
+
+            //SelectedCoordSystem = systemsTree.GetRootSystem();
+            //lvCoordsSystems.SelectedItem = SelectedCoordSystem;
         }
         private readonly CoordSystemsTree _systemsTree;
 
+        private ObservableCollection<CoordSystem> _root;
+        public ObservableCollection<CoordSystem> Root
+        {
+            get { return _root; }
+            init
+            {
+                _root = value;
+                OnPropertyChanged(nameof(Root));
+            }
+        }
         public CoordSystemsTree SystemsTree
         {
             init { 
@@ -77,10 +92,10 @@ namespace CoordCalc.Windows
             }
         }
 
-        private void lvCoordsSystems_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            SelectedCoordSystem = (CoordSystem)lvCoordsSystems.SelectedItem;
-        }
+        //private void lvCoordsSystems_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    SelectedCoordSystem = (CoordSystem)lvCoordsSystems.SelectedItem;
+        //}
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
@@ -93,5 +108,51 @@ namespace CoordCalc.Windows
             Success = false;
             Close();
         }
+
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            var selectedItem = e.NewValue as CoordSystem;
+            if (selectedItem != null)
+            {
+                SelectedCoordSystem = selectedItem;
+            }
+        }
+
+        private TreeViewItem? GetTreeViewItem(ItemsControl container, object item)
+        {
+            if (container == null) return null;
+
+            for (int i = 0; i < container.Items.Count; i++)
+            {
+                var currentItem = container.ItemContainerGenerator.ContainerFromIndex(i) as TreeViewItem;
+                if (currentItem == null) continue;
+
+                if (currentItem.DataContext == item)
+                    return currentItem;
+
+                // Expand node and recurse
+                if (currentItem.Items.Count > 0)
+                {
+                    currentItem.IsExpanded = true; // make sure child containers are generated
+                    var child = GetTreeViewItem(currentItem, item);
+                    if (child != null)
+                        return child;
+                }
+            }
+            return null;
+        }
+
+        private void tvCoordSystemSelectItem(object item)
+        {
+            if (item == null) return;
+            var treeViewItem = GetTreeViewItem(tvCoordSystems, item);
+            if (treeViewItem != null)
+            {
+                treeViewItem.BringIntoView();
+                treeViewItem.Focus();
+                treeViewItem.IsSelected = true;
+            }
+        }
+
     }
 }
