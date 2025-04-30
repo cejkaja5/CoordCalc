@@ -12,9 +12,6 @@
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
 
-        <!--<ListView Name="lvCoordsSystems" Grid.Row="0" ItemsSource="{Binding CoordSystems}"  
-                      SelectionMode="Single" SelectionChanged="lvCoordsSystems_SelectionChanged"/>-->
-
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
             <TreeView x:Name="tvCoordSystems" ItemsSource="{Binding Root}" 
                       SelectedItemChanged="TreeView_SelectedItemChanged"
