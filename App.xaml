@@ -17,6 +17,7 @@
             <classLib:Matrix4x4ToDisplayModelConverter x:Key="MatrixConverter" />
             <classLib:Vector3ToDisplayModelConverter x:Key="Vector3Converter" />
             <classLib:FloatSafeConverter x:Key="FloatSafeConverter" />
+            <classLib:FloatSafeMultiConverter x:Key="FloatSafeMultiConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -262,6 +262,20 @@ namespace CoordCalc.Windows
             }
         }
 
+        private Vector3DisplayModel _eulerAnglesVectorRadians;
+
+        public Vector3DisplayModel EulerAnglesVectorRadians
+        {
+            get { return _eulerAnglesVectorRadians; }
+            set
+            {
+                if (_eulerAnglesVectorRadians != value)
+                {
+                    _eulerAnglesVectorRadians = value;
+                    OnPropertyChanged(nameof(EulerAnglesVectorRadians));
+                }
+            }
+        }
 
         private QuaternionDisplayModel _rotationQuaternion;
 
@@ -318,6 +332,7 @@ namespace CoordCalc.Windows
                     RotationQuaternion = new QuaternionDisplayModel(rotation);
                     TranslationVector = new Vector3DisplayModel(translation);
                     EulerAnglesVector = new Vector3DisplayModel(rotation.ToEulerAngles());
+                    EulerAnglesVectorRadians = EulerAnglesVector.DegreesToRadians();
                 }
                 else
                 {
@@ -325,6 +340,7 @@ namespace CoordCalc.Windows
                     TranslationVector = new Vector3DisplayModel(new Vector3(0, 0, 0));
                     RotationQuaternion = new QuaternionDisplayModel(new System.Numerics.Quaternion(0, 0, 0, 1));
                     EulerAnglesVector = new Vector3DisplayModel(new Vector3(0, 0, 0));
+                    EulerAnglesVectorRadians = new Vector3DisplayModel(new Vector3(0, 0, 0));
                 }
             }
             else if (cbAsVector.IsChecked == true) 
@@ -339,6 +355,7 @@ namespace CoordCalc.Windows
                         RotationQuaternion = new QuaternionDisplayModel(rotation);
                         TranslationVector = new Vector3DisplayModel(translation);
                         EulerAnglesVector = new Vector3DisplayModel(rotation.ToEulerAngles());
+                        EulerAnglesVectorRadians = EulerAnglesVector.DegreesToRadians();
                     }
                     else
                     {
@@ -346,6 +363,7 @@ namespace CoordCalc.Windows
                         TranslationVector = new Vector3DisplayModel(new Vector3(0, 0, 0));
                         RotationQuaternion = new QuaternionDisplayModel(new System.Numerics.Quaternion(0, 0, 0, 1));
                         EulerAnglesVector = new Vector3DisplayModel(new Vector3(0, 0, 0));
+                        EulerAnglesVectorRadians = new Vector3DisplayModel(new Vector3(0, 0, 0));
                     }
                 }
                 catch
@@ -406,12 +424,18 @@ namespace CoordCalc.Windows
             {
                 quaternion = RotationQuaternion.ToQuaternion();
             }
+            else if (cbEulerAnglesRadians.IsChecked == true)
+            {
+                EulerAnglesVector = EulerAnglesVectorRadians.RadiansToDegrees();
+                quaternion = EulerAnglesVector.ToQuaternionFromYawPitchRoll();
+            }
             else
             {
                 return;
             }            
             quaternion = System.Numerics.Quaternion.Normalize(quaternion);
             EulerAnglesVector = new Vector3DisplayModel(quaternion.ToEulerAngles());
+            EulerAnglesVectorRadians = EulerAnglesVector.DegreesToRadians();
             RotationQuaternion = new QuaternionDisplayModel(quaternion);
         }
 
@@ -419,6 +443,7 @@ namespace CoordCalc.Windows
         {
             eulerAnglesInputField.Visibility = Visibility.Visible;
             cbQuaternion.IsChecked = false;
+            cbEulerAnglesRadians.IsChecked = false;
         }
 
         private void cbEulerAngles_Unchecked(object sender, RoutedEventArgs e)
@@ -430,11 +455,24 @@ namespace CoordCalc.Windows
         {
             quaternionInputField.Visibility = Visibility.Visible;
             cbEulerAngles.IsChecked = false;
+            cbEulerAnglesRadians.IsChecked = false;
         }
 
         private void cbQuaternion_Unchecked(object sender, RoutedEventArgs e)
         {
             quaternionInputField.Visibility = Visibility.Collapsed;
+        }
+
+        private void cbEulerAnglesRadians_Checked(object sender, RoutedEventArgs e)
+        {
+            eulerAnglesInputFieldRadians.Visibility = Visibility.Visible;
+            cbEulerAngles.IsChecked = false;
+            cbQuaternion.IsChecked = false;
+        }
+
+        private void cbEulerAnglesRadians_Unchecked(object sender, RoutedEventArgs e)
+        {
+            eulerAnglesInputFieldRadians.Visibility = Visibility.Collapsed;
         }
     }
 }

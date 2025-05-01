@@ -29,9 +29,37 @@
                 <ColumnDefinition Width="0.7*"/>
             </Grid.ColumnDefinitions>
 
-            
-            <ListView Name="lvCoordsSystems" Grid.Column="0" ItemsSource="{Binding CoordSystems}" 
-                      SelectionMode="Single" SelectionChanged="lvCoordsSystems_SelectionChanged"/>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
+                <TreeView x:Name="tvCoordSystems" ItemsSource="{Binding Root}" 
+                      SelectedItemChanged="TreeView_SelectedItemChanged"
+                      Margin="10"
+                      Background="WhiteSmoke"
+                      BorderBrush="Gray"
+                      BorderThickness="1">
+
+                    <TreeView.Resources>
+                        <!-- Style for TreeViewItem -->
+                        <Style TargetType="TreeViewItem">
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="Padding" Value="4"/>
+                            <Setter Property="Margin" Value="2"/>
+                            <Setter Property="IsExpanded" Value="True"/>
+                            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                        </Style>
+                    </TreeView.Resources>
+
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="●" Foreground="DarkSlateGray" FontSize="12" Margin="0,0,6,0"/>
+                                <TextBlock Text="{Binding Name}" 
+                                   VerticalAlignment="Center" 
+                                   FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+            </ScrollViewer>
 
             <StackPanel Grid.Column="1" HorizontalAlignment="Stretch" Margin="10" >
                 <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding SelectedCoordSystemNameText}" Width="Auto"/>
@@ -44,6 +72,7 @@
                 <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding SelectedCoordSystemScaleVectorText}" Width="Auto"/>
                 <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding SelectedCoordSystemRotationText}" Width="Auto"/>
                 <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding SelectedCoordSystemEulerAnglesText}" Width="Auto"/>
+                <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding SelectedCoordSystemEulerAnglesRadText}" Width="Auto"/>
 
                 <Border Height="1" Background="DarkSlateGray" Margin="0,5"/>
                 <StackPanel Orientation="Horizontal">

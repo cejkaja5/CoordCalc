@@ -5,14 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CoordCalc.View"
              mc:Ignorable="d" 
-             d:DesignHeight="40" d:DesignWidth="200">
+             Height="Auto" Width="Auto">
     <Border BorderBrush="Black" BorderThickness="1" Padding="0">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <Grid.Resources>
@@ -21,18 +21,18 @@
                     <Setter Property="TextAlignment" Value="Center"/>
                     <Setter Property="VerticalAlignment" Value="Center"/>
                     <Setter Property="FontSize" Value="14"/>
-                    <Setter Property="Width" Value="45"/>
+                    <Setter Property="Width" Value="Auto"/>
                     <Setter Property="Padding" Value="1"/>
                 </Style>
             </Grid.Resources>
 
-            <TextBox Text="{Binding Quat.X,Converter={StaticResource FloatSafeConverter}, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
+            <TextBox Text="{Binding Quat.X,Converter={StaticResource FloatSafeConverter}, RelativeSource={RelativeSource AncestorType=UserControl}, ConverterParameter=Quaternion}"
                Grid.Row="0" Grid.Column="0" GotFocus="TextBox_SelectAllTextOnFocus"  PreviewMouseLeftButtonDown="TextBox_PreviewMouseLeftButtonDown"  Margin="2"/>
-            <TextBox Text="{Binding Quat.Y,Converter={StaticResource FloatSafeConverter}, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
+            <TextBox Text="{Binding Quat.Y,Converter={StaticResource FloatSafeConverter}, RelativeSource={RelativeSource AncestorType=UserControl}, ConverterParameter=Quaternion}"
                Grid.Row="0" Grid.Column="1" GotFocus="TextBox_SelectAllTextOnFocus"  PreviewMouseLeftButtonDown="TextBox_PreviewMouseLeftButtonDown"  Margin="2"/>
-            <TextBox Text="{Binding Quat.Z,Converter={StaticResource FloatSafeConverter}, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
+            <TextBox Text="{Binding Quat.Z,Converter={StaticResource FloatSafeConverter}, RelativeSource={RelativeSource AncestorType=UserControl}, ConverterParameter=Quaternion}"
                Grid.Row="0" Grid.Column="2" GotFocus="TextBox_SelectAllTextOnFocus"  PreviewMouseLeftButtonDown="TextBox_PreviewMouseLeftButtonDown"  Margin="2"/>
-            <TextBox Text="{Binding Quat.W,Converter={StaticResource FloatSafeConverter}, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
+            <TextBox Text="{Binding Quat.W,Converter={StaticResource FloatSafeConverter}, RelativeSource={RelativeSource AncestorType=UserControl}, ConverterParameter=Quaternion}"
                Grid.Row="0" Grid.Column="3" GotFocus="TextBox_SelectAllTextOnFocus"  PreviewMouseLeftButtonDown="TextBox_PreviewMouseLeftButtonDown"  Margin="2"/>
         </Grid>
     </Border>

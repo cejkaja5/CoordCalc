@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,7 +12,13 @@ namespace CoordCalc.ClassLib
     {
         public static string ToCustomString(this Vector3 v)
         {
-            return $"[{v.X:F3}  {v.Y:F3}  {v.Z:F3}]";
+            return ToCustomString(v, GlobalSettings.FloatPrecisionDefault);
+        }
+
+        public static string ToCustomString(this Vector3 v, int precision)
+        {
+            string format = $"F{precision}";
+            return $"[{v.X.ToString(format)}  {v.Y.ToString(format)}  {v.Z.ToString(format)}]";
         }
 
         public static string ToEulerAnglesString(this Vector3 v)
@@ -40,6 +47,19 @@ namespace CoordCalc.ClassLib
             float pitch = MathF.PI * v.Y / 180f;
             float roll = MathF.PI * v.Z / 180f;
             return Quaternion.CreateFromYawPitchRoll(yaw, pitch, roll);
+        }
+
+        public static Vector3 DegreesToRadians(this Vector3 v)
+        {
+            return new Vector3(
+                ToRadians(v.X),
+                ToRadians(v.Y),
+                ToRadians(v.Z));
+        }
+
+        private static float ToRadians(float degrees)
+        {
+            return MathF.PI * degrees / 180f;
         }
     }
 }

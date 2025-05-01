@@ -34,9 +34,12 @@ namespace CoordCalc
         {
             _coordSystemTree = tree;
             _selectedCoordSystem = tree.GetRootSystem();
+            RootNode = new TreeViewModel(_coordSystemTree.GetRootSystem());
+            Root = new ObservableCollection<CoordSystem> { _coordSystemTree.GetRootSystem() };
             DataContext = this;
             InitializeComponent();
-            lvCoordsSystems.SelectedItem = _selectedCoordSystem;
+            //lvCoordsSystems.SelectedItem = _selectedCoordSystem;
+            tvCoordSystemSelectItem(_selectedCoordSystem);
             FilePath = opener.FilePath;
             opener.Close();
         }
@@ -60,6 +63,7 @@ namespace CoordCalc
             OnPropertyChanged(nameof(SelectedCoordSystemScaleVectorText));
             OnPropertyChanged(nameof(SelectedCoordSystemEulerAngles));
             OnPropertyChanged(nameof(SelectedCoordSystemEulerAnglesText));
+            OnPropertyChanged(nameof(SelectedCoordSystemEulerAnglesRadText));
             OnPropertyChanged(nameof(BtnGoToParentContent));
             OnPropertyChanged(nameof(BtnGetTransformationFromContent));
             OnPropertyChanged(nameof(BtnGetTransformationToContent));
@@ -183,7 +187,8 @@ namespace CoordCalc
             {
                 if (SelectedCoordSystemTranslationVector != null)
                 {
-                    return $"Translation vector: {((Vector3)SelectedCoordSystemTranslationVector).ToCustomString()}";
+                    return $"Translation vector: {((Vector3)SelectedCoordSystemTranslationVector).ToCustomString(
+                        GlobalSettings.FloatPrecisionTranslationVector)}";
                 }
                 else
                 {
@@ -206,7 +211,8 @@ namespace CoordCalc
             {
                 if (SelectedCoordSystemScaleVector != null)
                 {
-                    return $"Scale vector: {((Vector3)SelectedCoordSystemScaleVector).ToCustomString()}";
+                    return $"Scale vector: {((Vector3)SelectedCoordSystemScaleVector).ToCustomString(
+                        GlobalSettings.FloatPrecisionScaleVector)}";
                 }
                 else
                 {
@@ -237,11 +243,28 @@ namespace CoordCalc
             {
                 if (SelectedCoordSystemEulerAngles != null)
                 {
-                    return $"Euler angles in degrees: {((Vector3)SelectedCoordSystemEulerAngles).ToEulerAnglesString()}";
+                    return $"Yaw pitch roll (in deg): {((Vector3)SelectedCoordSystemEulerAngles).ToCustomString(
+                        GlobalSettings.FloatPrecisionEulerAnglesDeg)}";
                 }
                 else
                 {
-                    return "Euler angles: None";
+                    return "Yaw pitch roll (in deg): None";
+                }
+            }
+        }
+
+        public string SelectedCoordSystemEulerAnglesRadText
+        {
+            get
+            {
+                if (SelectedCoordSystemEulerAngles != null)
+                {
+                    return $"Yaw pitch roll (in rad): {((Vector3)SelectedCoordSystemEulerAngles).DegreesToRadians().ToCustomString(
+                        GlobalSettings.FloatPrecisionEulerAnglesRad)}";
+                }
+                else
+                {
+                    return "Yaw pitch roll (in rad): None";
                 }
             }
         }
@@ -252,7 +275,8 @@ namespace CoordCalc
             { 
                 if (SelectedCoordSystemRotation != null)
                 {
-                    return $"Quaternion: {((Quaternion)SelectedCoordSystemRotation).ToCustomString()}";
+                    return $"Quaternion: {((Quaternion)SelectedCoordSystemRotation).ToCustomString(
+                        GlobalSettings.FloatPrecisionQuaternion)}";
                 }
                 else
                 {
@@ -261,16 +285,12 @@ namespace CoordCalc
             }
         }
 
-        private void lvCoordsSystems_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            SelectedCoordSystem = (CoordSystem)lvCoordsSystems.SelectedItem;
-        }
 
         private void btnGoToParent_Click(object sender, RoutedEventArgs e)
         {
             if (_selectedCoordSystem.IsRoot()) return;
 
-            lvCoordsSystems.SelectedItem = _selectedCoordSystem.Parent;
+            tvCoordSystemSelectItem(_selectedCoordSystem.Parent);
         }
 
         public string BtnGoToParentContent
@@ -299,7 +319,9 @@ namespace CoordCalc
                 CoordSystem child = new CoordSystem(window.OutputMatrix, window.SystemName, SelectedCoordSystem);
                 _coordSystemTree.AddNode(child);
                 OnPropertyChanged(nameof(CoordSystems));
-                lvCoordsSystems.SelectedItem = child;
+                OnPropertyChanged(nameof(RootNode.RootNodes));
+                //lvCoordsSystems.SelectedItem = child;
+                tvCoordSystemSelectItem(child);
             }
         }
 
@@ -318,7 +340,9 @@ namespace CoordCalc
                 SelectedCoordSystem.Matrix = window.OutputMatrix;
 
                 decomposeMatrixAndSetAllProperties();
-             }
+                OnPropertyChanged(nameof(CoordSystems));
+                OnPropertyChanged(nameof(RootNode.RootNodes));
+            }
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
@@ -341,8 +365,10 @@ namespace CoordCalc
 
             CoordSystem parent = SelectedCoordSystem.Parent;
             _coordSystemTree.DeleteNodeAndDescendants(SelectedCoordSystem);
-            lvCoordsSystems.SelectedItem = parent;
+            //lvCoordsSystems.SelectedItem = parent;
+            tvCoordSystemSelectItem(parent);
             OnPropertyChanged(nameof(CoordSystems));
+            OnPropertyChanged(nameof(RootNode.RootNodes));
             OnPropertyChangedAllMatrixProperties();    
         }
 
@@ -418,7 +444,76 @@ namespace CoordCalc
 
         private void btnSettings_Click(object sender, RoutedEventArgs e)
         {
+            SettingsWindow window = new SettingsWindow();
+            window.ShowDialog();
+        }
 
+        private TreeViewModel _rootNode;
+        public TreeViewModel RootNode
+        {
+            get { return _rootNode; }
+            init 
+            {
+                _rootNode = value;
+                OnPropertyChanged(nameof(RootNode.RootNodes));
+            }
+        }
+
+        private ObservableCollection<CoordSystem> _root;
+        public ObservableCollection<CoordSystem> Root
+        {
+            get { return _root; }
+            init 
+            {
+                _root = value; 
+                OnPropertyChanged(nameof(Root));
+            }
+        }
+
+
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            var selectedItem = e.NewValue as CoordSystem;
+            if (selectedItem != null)
+            {
+                SelectedCoordSystem = selectedItem;
+            }
+        }
+
+        private TreeViewItem? GetTreeViewItem(ItemsControl container, object item)
+        {
+            if (container == null) return null;
+
+            for (int i = 0; i < container.Items.Count; i++)
+            {
+                var currentItem = container.ItemContainerGenerator.ContainerFromIndex(i) as TreeViewItem;
+                if (currentItem == null) continue;
+
+                if (currentItem.DataContext == item)
+                    return currentItem;
+
+                // Expand node and recurse
+                if (currentItem.Items.Count > 0)
+                {
+                    currentItem.IsExpanded = true; // make sure child containers are generated
+                    var child = GetTreeViewItem(currentItem, item);
+                    if (child != null)
+                        return child;
+                }
+            }
+            return null;
+        }
+
+        private void tvCoordSystemSelectItem(object item)
+        {
+            if (item == null) return;
+            var treeViewItem = GetTreeViewItem(tvCoordSystems, item);
+            if (treeViewItem != null)
+            {
+                treeViewItem.BringIntoView();
+                treeViewItem.Focus();
+                treeViewItem.IsSelected = true;
+            }
         }
     }
 }

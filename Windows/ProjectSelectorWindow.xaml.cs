@@ -29,6 +29,7 @@ namespace CoordCalc.Windows
         {
             _filePath = String.Empty;
             InitializeComponent();
+            GlobalSettings.LoadSettings();
             DataContext = this;
         }
 
@@ -121,6 +122,12 @@ namespace CoordCalc.Windows
             MainWindow mainWindow = new MainWindow(coordSystemsTree, this);
             mainWindow.Show();
             
+        }
+
+        private void uselessMethod()
+        {
+            // To create commit in git
+            return;
         }
     }
 }

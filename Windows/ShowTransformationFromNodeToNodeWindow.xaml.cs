@@ -35,6 +35,7 @@ namespace CoordCalc.Windows
             FromToText = $"Transformation from {origin.Name} to {destination.Name}";
             this.Title = FromToText;
             CalculateAndDisplayTransformation();
+            btnCalculate_Click(this, new RoutedEventArgs());
         }
 
         private void CalculateAndDisplayTransformation()
@@ -54,20 +55,36 @@ namespace CoordCalc.Windows
             Matrix = CoordSystemsTree.TransformationToMatrix(TransformationsList);
             if (Matrix4x4.Decompose(Matrix, out Vector3 scale, out Quaternion rotation, out Vector3 translation))
             {
-                TranslationVectorText = "Translation vector: " + translation.ToCustomString();
-                ScaleVectorText = "Scale vector: " + scale.ToCustomString();
-                RotationText = "Quaternion: " + rotation.ToCustomString();
-                EulerAnglesText = "Euler angles in degrees: " + rotation.ToEulerAngles().ToEulerAnglesString();
+                TranslationVectorText = "Translation vector: " + translation.ToCustomString(
+                    GlobalSettings.FloatPrecisionTranslationVector);
+                ScaleVectorText = "Scale vector: " + scale.ToCustomString(
+                    GlobalSettings.FloatPrecisionScaleVector);
+                RotationText = "Quaternion: " + rotation.ToCustomString(
+                    GlobalSettings.FloatPrecisionQuaternion);
+                EulerAnglesText = "Yaw pitch roll (in deg): " + rotation.ToEulerAngles().ToCustomString(
+                    GlobalSettings.FloatPrecisionEulerAnglesDeg);
+                EulerAnglesRadText = "Yaw pitch roll (in rad): " + rotation.ToEulerAngles().DegreesToRadians().ToCustomString(
+                    GlobalSettings.FloatPrecisionEulerAnglesRad);
+
             }
             else
             {
                 MatrixHelper.CheckIfMatrixIsDecomposable(Matrix, out string message);
                 MessageBox.Show($"Matrix decomposition failed. Matrix validity status: {message}", 
+<<<<<<< HEAD
                     "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 TranslationVectorText = "Translation vector: None";
                 ScaleVectorText = "Scale vector: None";
                 RotationText = "Quaternion: None";
                 EulerAnglesText = "Euler angles in degrees: None";
+=======
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                TranslationVectorText = "Translation vector: Error";
+                ScaleVectorText = "Scale vector: Error";
+                RotationText = "Quaternion: Error";
+                EulerAnglesText = "Yaw pitch roll (in deg): Error";
+                EulerAnglesRadText = "Yaw pitch roll (in rad): Error";
+>>>>>>> featureTreeView
             }
         }
 
@@ -171,10 +188,26 @@ namespace CoordCalc.Windows
                 if (_eulerAnglesText != value)
                 {
                     _eulerAnglesText = value;
-                    OnPropertyChanged(nameof(EulerAnglesText));
+                    OnPropertyChanged(nameof(EulerAnglesText)); 
                 }
             }
         }
+
+        private string _eulerAnglesRadText;
+
+        public string EulerAnglesRadText
+        {
+            get { return _eulerAnglesRadText; }
+            set
+            {
+                if (_eulerAnglesRadText != value)
+                {
+                    _eulerAnglesRadText = value;
+                    OnPropertyChanged(nameof(EulerAnglesRadText));
+                }
+            }  
+        }
+
 
         private Matrix4x4 _matrix = Matrix4x4.Identity;
 
@@ -270,7 +303,8 @@ namespace CoordCalc.Windows
         {
             Vector4 v = VectorToBeTransformed.ToVector4();
             Vector4 result = v.TransformAsRowVector(Matrix);
-            TransformedVectorText = (new Vector3(result.X, result.Y, result.Z)).ToCustomString();
+            TransformedVectorText = (new Vector3(result.X, result.Y, result.Z)).ToCustomString(
+                GlobalSettings.FloatPrecisionDefault);
         }
 
         private void btnShowStepByStepTransformation_Click(object sender, RoutedEventArgs e)

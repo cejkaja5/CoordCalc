@@ -61,7 +61,39 @@ namespace CoordCalc.ClassLib
 
         public override string ToString()
         {
-            return $"[{X:F3}  {Y:F3}  {Z:F3}]";
-        } 
+            return ToString(3);
+        }
+
+        public string ToString(int precision)
+        {
+            string format = $"F{precision}";
+            return $"[{X.ToString(format)}  {Y.ToString(format)}  {Z.ToString(format)}]";
+        }
+
+        public Vector3DisplayModel RadiansToDegrees()
+        {
+            return new Vector3DisplayModel(new Vector3(
+                ToDegrees(X),
+                ToDegrees(Y),
+                ToDegrees(Z)));
+        }
+
+        public Vector3DisplayModel DegreesToRadians()
+        {
+            return new Vector3DisplayModel(new Vector3(
+                ToRadians(X),
+                ToRadians(Y),
+                ToRadians(Z)));
+        }
+
+        private float ToDegrees(float radians)
+        {
+            return radians * 180 / MathF.PI;
+        }
+
+        private float ToRadians(float degrees)
+        {
+            return degrees * MathF.PI / 180;
+        }
     }       
 }
