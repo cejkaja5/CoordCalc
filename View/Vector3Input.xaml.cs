@@ -37,7 +37,26 @@ namespace CoordCalc.View
         public Vector3Input()
         {
             InitializeComponent();
+
+            if (string.IsNullOrEmpty(VectorType))
+            {
+                VectorType = "EulerAnglesDeg";
+            }
         }
+
+        public static readonly DependencyProperty VectorTypeProperty =
+            DependencyProperty.Register(
+                "VectorType",
+                typeof(string),
+                typeof(Vector3Input),
+                new PropertyMetadata("Default"));
+
+        public string VectorType
+        {
+            get { return (string)GetValue(VectorTypeProperty); }
+            set { SetValue(VectorTypeProperty, value); }
+        }
+
         public Vector3DisplayModel Vector
         {
             get { return (Vector3DisplayModel)GetValue(VectorProperty); }

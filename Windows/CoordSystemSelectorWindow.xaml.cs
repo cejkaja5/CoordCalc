@@ -38,11 +38,14 @@ namespace CoordCalc.Windows
             Root = new ObservableCollection<CoordSystem> {
                 systemsTree.GetRootSystem()
             };
-            tvCoordSystemSelectItem(Root[0]);
-
-            //SelectedCoordSystem = systemsTree.GetRootSystem();
-            //lvCoordsSystems.SelectedItem = SelectedCoordSystem;
+            Loaded += CoordSystemSelectorWindow_Loaded;
         }
+
+        private void CoordSystemSelectorWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            tvCoordSystemSelectItem(Root[0]);
+        }
+
         private readonly CoordSystemsTree _systemsTree;
 
         private ObservableCollection<CoordSystem> _root;
@@ -91,11 +94,6 @@ namespace CoordCalc.Windows
                 }
             }
         }
-
-        //private void lvCoordsSystems_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    SelectedCoordSystem = (CoordSystem)lvCoordsSystems.SelectedItem;
-        //}
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {

@@ -12,7 +12,13 @@ namespace CoordCalc.ClassLib
     {
         public static string ToCustomString(this Vector3 v)
         {
-            return $"[{v.X:F3}  {v.Y:F3}  {v.Z:F3}]";
+            return ToCustomString(v, GlobalSettings.FloatPrecisionDefault);
+        }
+
+        public static string ToCustomString(this Vector3 v, int precision)
+        {
+            string format = $"F{precision}";
+            return $"[{v.X.ToString(format)}  {v.Y.ToString(format)}  {v.Z.ToString(format)}]";
         }
 
         public static string ToEulerAnglesString(this Vector3 v)

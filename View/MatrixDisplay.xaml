@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CoordCalc.View"
              mc:Ignorable="d" 
-             Height="200" Width="200">
+             Height="200" Width="Auto">
     <Border BorderBrush="Black" BorderThickness="1" Padding="0">
     <Grid>
         <Grid.RowDefinitions>
@@ -15,10 +15,10 @@
             <RowDefinition Height="25*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="25*"/>
-            <ColumnDefinition Width="25*"/>
-            <ColumnDefinition Width="25*"/>
-            <ColumnDefinition Width="25*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
             <Grid.Resources>
@@ -30,42 +30,26 @@
                 </Style>
             </Grid.Resources>
 
-            <TextBlock Text="{Binding Matrix.M11, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
-                   Grid.Row="0" Grid.Column="0" Margin="2"/>
-            <TextBlock Text="{Binding Matrix.M12, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
-                   Grid.Row="0" Grid.Column="1" Margin="2"/>
-            <TextBlock Text="{Binding Matrix.M13, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
-                   Grid.Row="0" Grid.Column="2" Margin="2"/>
-            <TextBlock Text="{Binding Matrix.M14, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
-                   Grid.Row="0" Grid.Column="3" Margin="2"/>
+            <TextBlock Text="{Binding Matrix.M11, Converter={StaticResource FloatSafeConverter}, ConverterParameter=Matrix, RelativeSource={RelativeSource AncestorType=UserControl}}" Grid.Row="0" Grid.Column="0" Margin="4" MinWidth="50"/>
+            <TextBlock Text="{Binding Matrix.M12, Converter={StaticResource FloatSafeConverter}, ConverterParameter=Matrix, RelativeSource={RelativeSource AncestorType=UserControl}}" Grid.Row="0" Grid.Column="1" Margin="4" MinWidth="50"/>
+            <TextBlock Text="{Binding Matrix.M13, Converter={StaticResource FloatSafeConverter}, ConverterParameter=Matrix, RelativeSource={RelativeSource AncestorType=UserControl}}" Grid.Row="0" Grid.Column="2" Margin="4" MinWidth="50"/>
+            <TextBlock Text="{Binding Matrix.M14, Converter={StaticResource FloatSafeConverter}, ConverterParameter=Matrix, RelativeSource={RelativeSource AncestorType=UserControl}}" Grid.Row="0" Grid.Column="3" Margin="4" MinWidth="50"/>
 
-            <TextBlock Text="{Binding Matrix.M21, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
-                   Grid.Row="1" Grid.Column="0" Margin="2"/>
-            <TextBlock Text="{Binding Matrix.M22, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
-                   Grid.Row="1" Grid.Column="1" Margin="2"/>
-            <TextBlock Text="{Binding Matrix.M23, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}" 
-                   Grid.Row="1" Grid.Column="2" Margin="2"/>
-            <TextBlock Text="{Binding Matrix.M24, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
-                   Grid.Row="1" Grid.Column="3" Margin="2"/>
+            <TextBlock Text="{Binding Matrix.M21, Converter={StaticResource FloatSafeConverter}, ConverterParameter=Matrix, RelativeSource={RelativeSource AncestorType=UserControl}}" Grid.Row="1" Grid.Column="0" Margin="4" MinWidth="50"/>
+            <TextBlock Text="{Binding Matrix.M22, Converter={StaticResource FloatSafeConverter}, ConverterParameter=Matrix, RelativeSource={RelativeSource AncestorType=UserControl}}" Grid.Row="1" Grid.Column="1" Margin="4" MinWidth="50"/>
+            <TextBlock Text="{Binding Matrix.M23, Converter={StaticResource FloatSafeConverter}, ConverterParameter=Matrix, RelativeSource={RelativeSource AncestorType=UserControl}}" Grid.Row="1" Grid.Column="2" Margin="4" MinWidth="50"/>
+            <TextBlock Text="{Binding Matrix.M24, Converter={StaticResource FloatSafeConverter}, ConverterParameter=Matrix, RelativeSource={RelativeSource AncestorType=UserControl}}" Grid.Row="1" Grid.Column="3" Margin="4" MinWidth="50"/>
 
-            <TextBlock Text="{Binding Matrix.M31, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
-                   Grid.Row="2" Grid.Column="0" Margin="2"/>
-            <TextBlock Text="{Binding Matrix.M32, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
-                   Grid.Row="2" Grid.Column="1" Margin="2"/>
-            <TextBlock Text="{Binding Matrix.M33, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
-                   Grid.Row="2" Grid.Column="2" Margin="2"/>
-            <TextBlock Text="{Binding Matrix.M34, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
-                   Grid.Row="2" Grid.Column="3" Margin="2"/>
+            <TextBlock Text="{Binding Matrix.M31, Converter={StaticResource FloatSafeConverter}, ConverterParameter=Matrix, RelativeSource={RelativeSource AncestorType=UserControl}}" Grid.Row="2" Grid.Column="0" Margin="4" MinWidth="50"/>
+            <TextBlock Text="{Binding Matrix.M32, Converter={StaticResource FloatSafeConverter}, ConverterParameter=Matrix, RelativeSource={RelativeSource AncestorType=UserControl}}" Grid.Row="2" Grid.Column="1" Margin="4" MinWidth="50"/>
+            <TextBlock Text="{Binding Matrix.M33, Converter={StaticResource FloatSafeConverter}, ConverterParameter=Matrix, RelativeSource={RelativeSource AncestorType=UserControl}}" Grid.Row="2" Grid.Column="2" Margin="4" MinWidth="50"/>
+            <TextBlock Text="{Binding Matrix.M34, Converter={StaticResource FloatSafeConverter}, ConverterParameter=Matrix, RelativeSource={RelativeSource AncestorType=UserControl}}" Grid.Row="2" Grid.Column="3" Margin="4" MinWidth="50"/>
 
-            <TextBlock Text="{Binding Matrix.M41, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
-                   Grid.Row="3" Grid.Column="0" Margin="2"/>
-            <TextBlock Text="{Binding Matrix.M42, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
-                   Grid.Row="3" Grid.Column="1" Margin="2"/>
-            <TextBlock Text="{Binding Matrix.M43, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
-                   Grid.Row="3" Grid.Column="2" Margin="2"/>
-            <TextBlock Text="{Binding Matrix.M44, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
-                   Grid.Row="3" Grid.Column="3" Margin="2"/>
-    </Grid>
+            <TextBlock Text="{Binding Matrix.M41, Converter={StaticResource FloatSafeConverter}, ConverterParameter=Matrix, RelativeSource={RelativeSource AncestorType=UserControl}}" Grid.Row="3" Grid.Column="0" Margin="4" MinWidth="50"/>
+            <TextBlock Text="{Binding Matrix.M42, Converter={StaticResource FloatSafeConverter}, ConverterParameter=Matrix, RelativeSource={RelativeSource AncestorType=UserControl}}" Grid.Row="3" Grid.Column="1" Margin="4" MinWidth="50"/>
+            <TextBlock Text="{Binding Matrix.M43, Converter={StaticResource FloatSafeConverter}, ConverterParameter=Matrix, RelativeSource={RelativeSource AncestorType=UserControl}}" Grid.Row="3" Grid.Column="2" Margin="4" MinWidth="50"/>
+            <TextBlock Text="{Binding Matrix.M44, Converter={StaticResource FloatSafeConverter}, ConverterParameter=Matrix, RelativeSource={RelativeSource AncestorType=UserControl}}" Grid.Row="3" Grid.Column="3" Margin="4" MinWidth="50"/>
+        </Grid>
     </Border>
 
 

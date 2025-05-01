@@ -48,7 +48,7 @@
                 <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="Transformed vector:" Grid.Row="0" 
                            Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <controls:Vector3Input Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
-                           Vector="{Binding VectorToBeTransformed}"/>
+                           Vector="{Binding VectorToBeTransformed}" VectorType="Default"/>
                 <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="{Binding TransformedVectorText}" Grid.Row="1" 
                            Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 

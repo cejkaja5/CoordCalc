@@ -29,6 +29,7 @@ namespace CoordCalc.Windows
         {
             _filePath = String.Empty;
             InitializeComponent();
+            GlobalSettings.LoadSettings();
             DataContext = this;
         }
 

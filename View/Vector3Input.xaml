@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CoordCalc.View"
+             xmlns:lib="clr-namespace:CoordCalc"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="150">
     <Border BorderBrush="Black" BorderThickness="1" Padding="0">
@@ -20,17 +21,43 @@
                     <Setter Property="TextAlignment" Value="Center"/>
                     <Setter Property="VerticalAlignment" Value="Center"/>
                     <Setter Property="FontSize" Value="14"/>
-                    <Setter Property="Width" Value="{Binding TextBoxWidth, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                    <Setter Property="Width" Value="Auto"/>
                     <Setter Property="Padding" Value="1"/>
                 </Style>
             </Grid.Resources>
 
-            <TextBox Text="{Binding Vector.X,Converter={StaticResource FloatSafeConverter}, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
-               Grid.Row="0" Grid.Column="0" GotFocus="TextBox_SelectAllTextOnFocus"  PreviewMouseLeftButtonDown="TextBox_PreviewMouseLeftButtonDown"  Margin="2"/>
-            <TextBox Text="{Binding Vector.Y,Converter={StaticResource FloatSafeConverter}, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
-               Grid.Row="0" Grid.Column="1" GotFocus="TextBox_SelectAllTextOnFocus"  PreviewMouseLeftButtonDown="TextBox_PreviewMouseLeftButtonDown"  Margin="2"/>
-            <TextBox Text="{Binding Vector.Z,Converter={StaticResource FloatSafeConverter}, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=F3}"
-               Grid.Row="0" Grid.Column="2" GotFocus="TextBox_SelectAllTextOnFocus"  PreviewMouseLeftButtonDown="TextBox_PreviewMouseLeftButtonDown"  Margin="2"/>
-         </Grid>
+            <TextBox Grid.Column="0" Margin="2"
+             GotFocus="TextBox_SelectAllTextOnFocus"
+             PreviewMouseLeftButtonDown="TextBox_PreviewMouseLeftButtonDown">
+                <TextBox.Text>
+                    <MultiBinding Converter="{StaticResource FloatSafeMultiConverter}">
+                        <Binding Path="Vector.X" RelativeSource="{RelativeSource AncestorType=UserControl}" />
+                        <Binding Path="VectorType" RelativeSource="{RelativeSource AncestorType=UserControl}" />
+                    </MultiBinding>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox Grid.Column="1" Margin="2" 
+             GotFocus="TextBox_SelectAllTextOnFocus"
+             PreviewMouseLeftButtonDown="TextBox_PreviewMouseLeftButtonDown">
+                <TextBox.Text>
+                    <MultiBinding Converter="{StaticResource FloatSafeMultiConverter}">
+                        <Binding Path="Vector.Y" RelativeSource="{RelativeSource AncestorType=UserControl}" />
+                        <Binding Path="VectorType" RelativeSource="{RelativeSource AncestorType=UserControl}" />
+                    </MultiBinding>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox Grid.Column="2" Margin="2"
+             GotFocus="TextBox_SelectAllTextOnFocus"
+             PreviewMouseLeftButtonDown="TextBox_PreviewMouseLeftButtonDown">
+                <TextBox.Text>
+                    <MultiBinding Converter="{StaticResource FloatSafeMultiConverter}">
+                        <Binding Path="Vector.Z" RelativeSource="{RelativeSource AncestorType=UserControl}" />
+                        <Binding Path="VectorType" RelativeSource="{RelativeSource AncestorType=UserControl}" />
+                    </MultiBinding>
+                </TextBox.Text>
+            </TextBox>
+        </Grid>
     </Border>
 </UserControl>

@@ -57,21 +57,25 @@
         </Grid>
 
         <Grid Name="mainContentAnglesAndTranslation" Visibility="Collapsed" Grid.Row="2">
-            <StackPanel Orientation="Vertical" Width="260" HorizontalAlignment="Center">
+            <StackPanel Orientation="Vertical" Width="Auto" HorizontalAlignment="Center">
                 <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="Enter translation vector:" HorizontalAlignment="Center"/>
-                <controls:Vector3Input Vector="{Binding TranslationVector}" Width="Auto" HorizontalAlignment="Center"/>
+                <controls:Vector3Input Vector="{Binding TranslationVector}" VectorType="TranslationVector"
+                                       Width="Auto" HorizontalAlignment="Center"/>
                 <TextBlock Style="{StaticResource MyTextBlockStyle}" Text="Enter scale vector:" HorizontalAlignment="Center"/>
-                <controls:Vector3Input  Vector="{Binding ScaleVector}" Width="Auto" HorizontalAlignment="Center"/>
+                <controls:Vector3Input  Vector="{Binding ScaleVector}" VectorType="ScaleVector"
+                                        Width="Auto" HorizontalAlignment="Center"/>
                 <CheckBox Name="cbEulerAngles" Style="{StaticResource MyCheckBoxStyle}" Content="Yaw pitch roll (in deg)" Width="Auto" 
                           Checked="cbEulerAngles_Checked" Unchecked="cbEulerAngles_Unchecked"/>
                 <CheckBox Name="cbEulerAnglesRadians" Style="{StaticResource MyCheckBoxStyle}" Content="Yaw pitch roll (in rad)" Width="Auto" 
                           Checked="cbEulerAnglesRadians_Checked" Unchecked="cbEulerAnglesRadians_Unchecked"/>
                 <CheckBox Name="cbQuaternion" Style="{StaticResource MyCheckBoxStyle}" Content="Quaternion" Width="Auto"
                           Checked="cbQuaternion_Checked" Unchecked="cbQuaternion_Unchecked"/>
-                <controls:Vector3Input x:Name="eulerAnglesInputField" Vector="{Binding EulerAnglesVector}" Visibility="Collapsed" 
-                                       Width="215" HorizontalAlignment="Center" TextBoxWidth="65" />
-                <controls:Vector3Input x:Name="eulerAnglesInputFieldRadians" Vector="{Binding EulerAnglesVectorRadians}" Visibility="Collapsed" 
-                                       Width="215" HorizontalAlignment="Center" TextBoxWidth="65" />
+                <controls:Vector3Input x:Name="eulerAnglesInputField" Vector="{Binding EulerAnglesVector}" 
+                                       VectorType="EulerAnglesDeg" Visibility="Collapsed" 
+                                       Width="Auto" HorizontalAlignment="Center" TextBoxWidth="65" />
+                <controls:Vector3Input x:Name="eulerAnglesInputFieldRadians" Vector="{Binding EulerAnglesVectorRadians}" 
+                                       VectorType="EulerAnglesRad" Visibility="Collapsed" 
+                                       Width="Auto" HorizontalAlignment="Center" TextBoxWidth="65" />
                 <controls:QuaternionInput x:Name="quaternionInputField" Quat="{Binding RotationQuaternion}" Visibility="Collapsed"
                                           Width="Auto" HorizontalAlignment="Center"/>
                 <Button Name="btnNormalizeAngles" Style="{StaticResource MyButtonStyle}" Content="Normalize" Click="btnNormalizeAngles_Click"/>

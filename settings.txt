@@ -1,0 +1,7 @@
+FloatPrecisionDefault = 3
+FloatPrecisionTranslationVector = 4
+FloatPrecisionScaleVector = 3
+FloatPrecisionEulerAnglesDeg = 2
+FloatPrecisionEulerAnglesRad = 4
+FloatPrecisionQuaternion = 4
+FloatPrecisionMatrix = 3

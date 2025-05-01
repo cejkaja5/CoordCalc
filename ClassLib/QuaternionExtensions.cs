@@ -11,7 +11,13 @@ namespace CoordCalc.ClassLib
     {
         public static string ToCustomString(this Quaternion q)
         {
-            return $"[{q.X:F3}  {q.Y:F3}  {q.Z:F3}  {q.W:F3}]";
+            return ToCustomString(q, GlobalSettings.FloatPrecisionDefault);
+        }
+
+        public static string ToCustomString(this Quaternion q, int precision)
+        {
+            string format = $"F{precision}";
+            return $"[{q.X.ToString(format)}  {q.Y.ToString(format)}  {q.Z.ToString(format)}  {q.W.ToString(format)}]";
         }
 
         public static Vector3 ToEulerAngles(this Quaternion q)

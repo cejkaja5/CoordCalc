@@ -55,11 +55,16 @@ namespace CoordCalc.Windows
             Matrix = CoordSystemsTree.TransformationToMatrix(TransformationsList);
             if (Matrix4x4.Decompose(Matrix, out Vector3 scale, out Quaternion rotation, out Vector3 translation))
             {
-                TranslationVectorText = "Translation vector: " + translation.ToCustomString();
-                ScaleVectorText = "Scale vector: " + scale.ToCustomString();
-                RotationText = "Quaternion: " + rotation.ToCustomString();
-                EulerAnglesText = "Yaw pitch roll (in deg): " + rotation.ToEulerAngles().ToCustomString();
-                EulerAnglesRadText = "Yaw pitch roll (in rad): " + rotation.ToEulerAngles().DegreesToRadians().ToCustomString();
+                TranslationVectorText = "Translation vector: " + translation.ToCustomString(
+                    GlobalSettings.FloatPrecisionTranslationVector);
+                ScaleVectorText = "Scale vector: " + scale.ToCustomString(
+                    GlobalSettings.FloatPrecisionScaleVector);
+                RotationText = "Quaternion: " + rotation.ToCustomString(
+                    GlobalSettings.FloatPrecisionQuaternion);
+                EulerAnglesText = "Yaw pitch roll (in deg): " + rotation.ToEulerAngles().ToCustomString(
+                    GlobalSettings.FloatPrecisionEulerAnglesDeg);
+                EulerAnglesRadText = "Yaw pitch roll (in rad): " + rotation.ToEulerAngles().DegreesToRadians().ToCustomString(
+                    GlobalSettings.FloatPrecisionEulerAnglesRad);
 
             }
             else
@@ -290,7 +295,8 @@ namespace CoordCalc.Windows
         {
             Vector4 v = VectorToBeTransformed.ToVector4();
             Vector4 result = v.TransformAsRowVector(Matrix);
-            TransformedVectorText = (new Vector3(result.X, result.Y, result.Z)).ToCustomString();
+            TransformedVectorText = (new Vector3(result.X, result.Y, result.Z)).ToCustomString(
+                GlobalSettings.FloatPrecisionDefault);
         }
     } 
 }

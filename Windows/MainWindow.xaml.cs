@@ -186,7 +186,8 @@ namespace CoordCalc
             {
                 if (SelectedCoordSystemTranslationVector != null)
                 {
-                    return $"Translation vector: {((Vector3)SelectedCoordSystemTranslationVector).ToCustomString()}";
+                    return $"Translation vector: {((Vector3)SelectedCoordSystemTranslationVector).ToCustomString(
+                        GlobalSettings.FloatPrecisionTranslationVector)}";
                 }
                 else
                 {
@@ -209,7 +210,8 @@ namespace CoordCalc
             {
                 if (SelectedCoordSystemScaleVector != null)
                 {
-                    return $"Scale vector: {((Vector3)SelectedCoordSystemScaleVector).ToCustomString()}";
+                    return $"Scale vector: {((Vector3)SelectedCoordSystemScaleVector).ToCustomString(
+                        GlobalSettings.FloatPrecisionScaleVector)}";
                 }
                 else
                 {
@@ -240,7 +242,8 @@ namespace CoordCalc
             {
                 if (SelectedCoordSystemEulerAngles != null)
                 {
-                    return $"Yaw pitch roll (in deg): {((Vector3)SelectedCoordSystemEulerAngles).ToCustomString()}";
+                    return $"Yaw pitch roll (in deg): {((Vector3)SelectedCoordSystemEulerAngles).ToCustomString(
+                        GlobalSettings.FloatPrecisionEulerAnglesDeg)}";
                 }
                 else
                 {
@@ -255,7 +258,8 @@ namespace CoordCalc
             {
                 if (SelectedCoordSystemEulerAngles != null)
                 {
-                    return $"Yaw pitch roll (in rad): {((Vector3)SelectedCoordSystemEulerAngles).DegreesToRadians().ToCustomString()}";
+                    return $"Yaw pitch roll (in rad): {((Vector3)SelectedCoordSystemEulerAngles).DegreesToRadians().ToCustomString(
+                        GlobalSettings.FloatPrecisionEulerAnglesRad)}";
                 }
                 else
                 {
@@ -270,7 +274,8 @@ namespace CoordCalc
             { 
                 if (SelectedCoordSystemRotation != null)
                 {
-                    return $"Quaternion: {((Quaternion)SelectedCoordSystemRotation).ToCustomString()}";
+                    return $"Quaternion: {((Quaternion)SelectedCoordSystemRotation).ToCustomString(
+                        GlobalSettings.FloatPrecisionQuaternion)}";
                 }
                 else
                 {
@@ -279,16 +284,11 @@ namespace CoordCalc
             }
         }
 
-        //private void lvCoordsSystems_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    SelectedCoordSystem = (CoordSystem)lvCoordsSystems.SelectedItem;
-        //}
 
         private void btnGoToParent_Click(object sender, RoutedEventArgs e)
         {
             if (_selectedCoordSystem.IsRoot()) return;
 
-            //lvCoordsSystems.SelectedItem = _selectedCoordSystem.Parent;
             tvCoordSystemSelectItem(_selectedCoordSystem.Parent);
         }
 
@@ -434,7 +434,8 @@ namespace CoordCalc
 
         private void btnSettings_Click(object sender, RoutedEventArgs e)
         {
-
+            SettingsWindow window = new SettingsWindow();
+            window.ShowDialog();
         }
 
         private TreeViewModel _rootNode;
