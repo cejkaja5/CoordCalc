@@ -1,5 +1,5 @@
 FloatPrecisionDefault = 3
-FloatPrecisionTranslationVector = 4
+FloatPrecisionTranslationVector = 6
 FloatPrecisionScaleVector = 3
 FloatPrecisionEulerAnglesDeg = 2
 FloatPrecisionEulerAnglesRad = 4

@@ -71,20 +71,12 @@ namespace CoordCalc.Windows
             {
                 MatrixHelper.CheckIfMatrixIsDecomposable(Matrix, out string message);
                 MessageBox.Show($"Matrix decomposition failed. Matrix validity status: {message}", 
-<<<<<<< HEAD
                     "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 TranslationVectorText = "Translation vector: None";
                 ScaleVectorText = "Scale vector: None";
                 RotationText = "Quaternion: None";
-                EulerAnglesText = "Euler angles in degrees: None";
-=======
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                TranslationVectorText = "Translation vector: Error";
-                ScaleVectorText = "Scale vector: Error";
-                RotationText = "Quaternion: Error";
-                EulerAnglesText = "Yaw pitch roll (in deg): Error";
-                EulerAnglesRadText = "Yaw pitch roll (in rad): Error";
->>>>>>> featureTreeView
+                EulerAnglesText = "Yaw pitch roll (in deg): None";
+                EulerAnglesRadText = "Yaw pitch roll (in rad): None";
             }
         }
 
